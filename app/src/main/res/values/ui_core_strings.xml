@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">UICore</string>
     <string name="loading_text">加载中...</string>
     <!--WheelPicker-->
     <string name="wheel_picker_cancel">取消</string>

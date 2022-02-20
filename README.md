@@ -547,6 +547,72 @@ datePicker.show();
 ```
 android:drawableRight="@drawable/android_ic_clear_text"
 ```
+## RecyclerAdapter
+普通RecyclerView Adapter封装类
+```
+public class ItemAdapter extends RecyclerAdapter<String> {
+    
+    public ItemAdapter(Context context) {
+        super(context);
+    }
+
+    @Override
+    protected int getItemLayoutResId(int viewType) {
+        return R.layout.xxx;
+    }
+
+    @Override
+    protected void onItemBindViewHolder(ViewHolder holder, int position) {
+        holder.find(TextView.class,R.id.tv_name).setText("xxx");
+        holder.addItemClick(R.id.tv_name);
+    }
+
+}
+```
+## SwipeRecyclerView
+侧滑删除，上拉加载更多，使用请查阅[SwipeRecyclerView](https://github.com/RelinRan/SwipeRecyclerView);
+注意：UICore内含SwipeRecyclerView,只是包名和SwipeRecyclerView单独依赖不一致。不要使用错误。
+```
+<androidx.ui.core.recycler.SwipeRecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+```
+## SwipeRecyclerAdapter
+SwipeRecyclerView侧滑删除，上拉加载更多RecyclerView Adapter封装类;
+详细使用请查阅[SwipeRecyclerAdapter](https://github.com/RelinRan/SwipeRecyclerAdapter);
+注意：UICore内含SwipeRecyclerAdapter，只是包名和SwipeRecyclerAdapter单独依赖不一致。不要使用错误。
+```
+public class ItemAdapter extends SwipeRecyclerAdapter<String> {
+
+    public ItemAdapter(Context context) {
+        super(context);
+    }
+
+    @Override
+    protected int getItemSwipeMenuLayoutResId() {
+        //菜单布局
+        return R.layout.xxx;
+    }
+
+    @Override
+    protected int getItemLayoutResId(int viewType) {
+        //普通item布局
+        return R.layout.xxx;
+    }
+
+    @Override
+    protected void onSwipeBindViewHolder(ViewHolder holder, int position) {
+        super.onSwipeBindViewHolder(holder, position);
+        //侧滑绑定数据
+    }
+
+    @Override
+    protected void onItemBindViewHolder(ViewHolder holder, int position) {
+
+    }
+    
+}
+```
 ## Time
 时间工具类
 ### 现在时间

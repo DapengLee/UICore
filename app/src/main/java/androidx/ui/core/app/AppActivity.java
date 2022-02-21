@@ -5,17 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.ui.core.type.Position;
 
 
 /**
  * 应用程序 - 活动页面
  */
-public class AppActivity extends AppCompatActivity implements AppTransaction, AppLayout, AppPlaceholder, AppActionBar.OnAppActionBarClickListener, AppPermission.OnRequestPermissionsListener, AppLoading {
+public class AppActivity extends AppCompatActivity implements AppTransaction, AppLayout, AppView, AppPlaceholder, AppActionBar.OnAppActionBarClickListener, AppPermission.OnRequestPermissionsListener, AppLoading, View.OnClickListener {
 
     private AppActionBar appActionBar;
     private AppTransaction transaction;
@@ -139,6 +142,7 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
         setContentView(getPlaceholder().getParent());
         setAppTransactionImpl(new AppTransactionImpl(this));
         setLoading(new AppLoadingImpl(this));
+        onInitViews();
     }
 
     @Override
@@ -333,6 +337,28 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
         getLoading().dismissLoading();
     }
 
+    @Override
+    public void onInitViews() {
+
+    }
+
+    @Override
+    public void addClick(int... ids) {
+        for (int i = 0; i < ids.length; i++) {
+            findViewById(ids[i]).setOnClickListener(this);
+        }
+    }
+
+    @Override
+    public <T extends View> T find(Class<T> clazz, int id) {
+        return findViewById(id);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
     /**
      * 显示提示
      *
@@ -340,6 +366,71 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
      */
     public void showToast(String msg) {
         AppToast.show(this, msg);
+    }
+
+    /**
+     * 设置标题
+     *
+     * @param text 文字
+     */
+    public void setTitle(String text) {
+        getAppActionBar().setTitle(text);
+    }
+
+    /**
+     * 设置返回按钮
+     *
+     * @param resId 图标
+     */
+    public void setBackIconResource(int resId) {
+        getAppActionBar().setBackIconResource(resId);
+    }
+
+    /**
+     * 设置返回按钮内间距
+     *
+     * @param position 位置{@link Position#ALL}
+     * @param dimen    间距
+     */
+    public void setBackIconPadding(Position position, int dimen) {
+        getAppActionBar().setBackIconPadding(position, getResources().getDimensionPixelOffset(dimen));
+    }
+
+    /**
+     * 设置返回按钮内间距
+     *
+     * @param position 位置{@link Position#ALL}
+     * @param dimen    间距
+     */
+    public void setMenuIconPadding(Position position, int dimen) {
+        getAppActionBar().setMenuIconPadding(position, getResources().getDimensionPixelOffset(dimen));
+    }
+
+    /**
+     * 设置文字颜色
+     *
+     * @param color 颜色
+     */
+    public void setMenuTextColor(@ColorInt int color) {
+        getAppActionBar().setMenuTextColor(color);
+    }
+
+    /**
+     * 设置菜单图标
+     *
+     * @param resId 资源
+     */
+    public void setMenuIcon(@DrawableRes int resId) {
+        getAppActionBar().setMenuIcon(resId);
+    }
+
+    /**
+     * 设置动作栏颜色
+     *
+     * @param color 颜色
+     */
+    public void setAppActionBarColor(int color) {
+        getAppActionBar().setBackgroundColor(color);
     }
 
 }

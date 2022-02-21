@@ -17,21 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.ui.core.R;
+import androidx.ui.core.type.Position;
 
 /**
  * 应用标题栏
  */
 public class AppActionBar implements View.OnClickListener {
-
-    /********START Padding Position*********/
-    public static final int ALL = 0;
-    public static final int LEFT = 1;
-    public static final int TOP = 2;
-    public static final int RIGHT = 3;
-    public static final int BOTTOM = 4;
-    public static final int HORIZONTAL = 5;
-    public static final int VERTICAL = 6;
-    /********END Padding Position*********/
 
     private AppCompatActivity activity;
     private ActionBar actionBar;
@@ -164,36 +155,34 @@ public class AppActionBar implements View.OnClickListener {
      * 设置View内间距
      *
      * @param v        控件
-     * @param position 位置{@link #ALL}
+     * @param position 位置{@link Position#ALL}
      * @param padding  间距
      */
-    public void setViewPadding(View v, int position, int padding) {
+    public void setViewPadding(View v, Position position, int padding) {
         int leftPadding = v.getPaddingLeft();
         int topPadding = v.getPaddingTop();
         int rightPadding = v.getPaddingRight();
         int bottomPadding = v.getPaddingBottom();
-        switch (position) {
-            case ALL:
-                v.setPadding(padding, padding, padding, padding);
-                break;
-            case HORIZONTAL:
-                v.setPadding(padding, topPadding, padding, bottomPadding);
-                break;
-            case VERTICAL:
-                v.setPadding(leftPadding, padding, rightPadding, padding);
-                break;
-            case LEFT:
-                v.setPadding(padding, topPadding, rightPadding, bottomPadding);
-                break;
-            case TOP:
-                v.setPadding(leftPadding, padding, rightPadding, bottomPadding);
-                break;
-            case RIGHT:
-                v.setPadding(leftPadding, topPadding, padding, bottomPadding);
-                break;
-            case BOTTOM:
-                v.setPadding(leftPadding, topPadding, rightPadding, padding);
-                break;
+        if (position == Position.ALL) {
+            v.setPadding(padding, padding, padding, padding);
+        }
+        if (position == Position.HORIZONTAL) {
+            v.setPadding(padding, topPadding, padding, bottomPadding);
+        }
+        if (position == Position.VERTICAL) {
+            v.setPadding(leftPadding, padding, rightPadding, padding);
+        }
+        if (position == Position.LEFT) {
+            v.setPadding(padding, topPadding, rightPadding, bottomPadding);
+        }
+        if (position == Position.TOP) {
+            v.setPadding(leftPadding, padding, rightPadding, bottomPadding);
+        }
+        if (position == Position.RIGHT) {
+            v.setPadding(leftPadding, topPadding, padding, bottomPadding);
+        }
+        if (position == Position.BOTTOM) {
+            v.setPadding(leftPadding, topPadding, rightPadding, padding);
         }
     }
 
@@ -302,10 +291,10 @@ public class AppActionBar implements View.OnClickListener {
     /**
      * 设置返回按钮内间距
      *
-     * @param position 位置{@link #ALL}
+     * @param position 位置{@link Position#ALL}
      * @param padding  间距
      */
-    public void setBackIconPadding(int position, int padding) {
+    public void setBackIconPadding(Position position, int padding) {
         setViewPadding(backIconView, position, padding);
     }
 
@@ -348,10 +337,10 @@ public class AppActionBar implements View.OnClickListener {
     /**
      * 返回文字内间距
      *
-     * @param position 位置{@link #ALL}
+     * @param position 位置{@link Position#ALL}
      * @param padding  间距
      */
-    public void setBackTextPadding(int position, int padding) {
+    public void setBackTextPadding(Position position, int padding) {
         setViewPadding(backTextView, position, padding);
     }
 
@@ -412,10 +401,10 @@ public class AppActionBar implements View.OnClickListener {
     /**
      * 设置菜单按钮内间距
      *
-     * @param position 位置{@link #ALL}
+     * @param position 位置{@link Position#ALL}
      * @param padding  间距
      */
-    public void setMenuIconPadding(int position, int padding) {
+    public void setMenuIconPadding(Position position, int padding) {
         setViewPadding(menuIconView, position, padding);
     }
 
@@ -458,10 +447,10 @@ public class AppActionBar implements View.OnClickListener {
     /**
      * 设置菜单文字内间距
      *
-     * @param position 位置{@link #ALL}
+     * @param position 位置{@link Position#ALL}
      * @param padding  间距
      */
-    public void setMenuTextPadding(int position, int padding) {
+    public void setMenuTextPadding(Position position, int padding) {
         setViewPadding(menuTextView, position, padding);
     }
 

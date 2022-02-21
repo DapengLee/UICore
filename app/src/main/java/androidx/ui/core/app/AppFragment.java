@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 /**
  * 应用程序 - Fragment
  */
-public class AppFragment extends Fragment implements AppTransaction, AppLayout, AppPlaceholder, AppPermission.OnRequestPermissionsListener, AppLoading {
+public class AppFragment extends Fragment implements AppTransaction, AppLayout,AppView, AppPlaceholder, AppPermission.OnRequestPermissionsListener, AppLoading,View.OnClickListener {
 
     private View contentView;
     private AppTransaction transaction;
@@ -315,6 +315,28 @@ public class AppFragment extends Fragment implements AppTransaction, AppLayout, 
      */
     public void showToast(String msg) {
         AppToast.show(getContext(), msg);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onInitViews() {
+
+    }
+
+    @Override
+    public void addClick(int... ids) {
+        for (int i = 0; i < ids.length; i++) {
+            findViewById(ids[i]).setOnClickListener(this);
+        }
+    }
+
+    @Override
+    public <T extends View> T find(Class<T> clazz, int id) {
+        return findViewById(id);
     }
 
 }

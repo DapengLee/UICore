@@ -24,6 +24,9 @@ public class Text {
         if (editText.getText().toString().equals("null")) {
             return true;
         }
+        if (editText.getText().toString().length()==0) {
+            return true;
+        }
         return false;
     }
 
@@ -41,6 +44,9 @@ public class Text {
             return true;
         }
         if (textView.getText().toString().equals("null")) {
+            return true;
+        }
+        if (textView.getText().toString().length()==0) {
             return true;
         }
         return false;
@@ -96,10 +102,7 @@ public class Text {
         if (textView == null) {
             return "";
         }
-        if (isEmpty(textView)) {
-            return "";
-        }
-        return textView.getText().toString();
+        return from(textView.getText().toString());
     }
 
     /**
@@ -112,10 +115,7 @@ public class Text {
         if (editText == null) {
             return "";
         }
-        if (isEmpty(editText)) {
-            return "";
-        }
-        return editText.getText().toString();
+        return from(editText.getText().toString());
     }
 
     /**

@@ -90,13 +90,13 @@ public class ShapeText extends AppCompatTextView {
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeText);
             gravity = typedArray.getInt(R.styleable.ShapeText_android_gravity, gravity);
-            solid = typedArray.getColor(R.styleable.ShapeText_solid_color, solid);
-            strokeWidth = (int) typedArray.getDimension(R.styleable.ShapeText_stroke_width, strokeWidth);
-            strokeColor = typedArray.getColor(R.styleable.ShapeText_stroke_color, strokeColor);
-            if (typedArray.getString(R.styleable.ShapeText_android_shape) != null) {
-                shape = Integer.parseInt(typedArray.getString(R.styleable.ShapeText_android_shape));
+            solid = typedArray.getColor(R.styleable.ShapeText_solidColor, solid);
+            strokeWidth = (int) typedArray.getDimension(R.styleable.ShapeText_strokeWidth, strokeWidth);
+            strokeColor = typedArray.getColor(R.styleable.ShapeText_strokeColor, strokeColor);
+            if (typedArray.getString(R.styleable.ShapeText_shape) != null) {
+                shape = Integer.parseInt(typedArray.getString(R.styleable.ShapeText_shape));
             }
-            radius = typedArray.getDimension(R.styleable.ShapeText_android_radius, 0);
+            radius = typedArray.getDimension(R.styleable.ShapeText_radius, 0);
             topLeftRadius = typedArray.getDimension(R.styleable.ShapeText_topLeftRadius, 0);
             topRightRadius = typedArray.getDimension(R.styleable.ShapeText_topRightRadius, 0);
             bottomLeftRadius = typedArray.getDimension(R.styleable.ShapeText_bottomLeftRadius, 0);

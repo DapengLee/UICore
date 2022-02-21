@@ -18,7 +18,7 @@ allprojects {
 2./app/build.grade
 ```
 dependencies {
-	implementation 'com.github.RelinRan:UICore:2022.2.20.1'
+	implementation 'com.github.RelinRan:UICore:2022.2.21.1'
 }
 ```
 ## AppActivity
@@ -348,8 +348,8 @@ AppStatusBar.hide(this);
 <androidx.ui.core.widget.ShapeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:solid_color="#BC68E0"
-    android:radius="5dp"/>
+    app:solidColor="#BC68E0"
+    app:radius="5dp"/>
 </androidx.ui.core.widget.ShapeLayout>
 ```
 ## ShapeText
@@ -358,8 +358,8 @@ AppStatusBar.hide(this);
 <androidx.ui.core.widget.ShapeText
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:solid_color="#BC68E0"
-    android:radius="5dp"
+    app:solidColor="#BC68E0"
+    app:radius="5dp"
     android:text="item"
     android:textSize="14sp"/>
 ```
@@ -369,8 +369,8 @@ AppStatusBar.hide(this);
 <androidx.ui.core.widget.ShapeButton
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:solidColor="#BC68E0"
-    android:radius="5dp"
+    app:solidColor="#BC68E0"
+    app:radius="5dp"
     android:text="item"
     android:textSize="14sp"/>
 ```

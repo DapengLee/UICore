@@ -79,13 +79,13 @@ public class ShapeLayout extends RelativeLayout {
     private void initAttributeSet(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ShapeLayout);
-            solid = array.getColor(R.styleable.ShapeLayout_solid_color, solid);
-            strokeWidth = (int) array.getDimension(R.styleable.ShapeLayout_stroke_width, strokeWidth);
-            strokeColor = array.getColor(R.styleable.ShapeLayout_stroke_color, strokeColor);
-            if (array.getString(R.styleable.ShapeLayout_android_shape) != null) {
-                shape = Integer.parseInt(array.getString(R.styleable.ShapeLayout_android_shape));
+            solid = array.getColor(R.styleable.ShapeLayout_solidColor, solid);
+            strokeWidth = (int) array.getDimension(R.styleable.ShapeLayout_strokeWidth, strokeWidth);
+            strokeColor = array.getColor(R.styleable.ShapeLayout_strokeColor, strokeColor);
+            if (array.getString(R.styleable.ShapeLayout_shape) != null) {
+                shape = Integer.parseInt(array.getString(R.styleable.ShapeLayout_shape));
             }
-            radius = array.getDimension(R.styleable.ShapeLayout_android_radius, 0);
+            radius = array.getDimension(R.styleable.ShapeLayout_radius, 0);
             topLeftRadius = array.getDimension(R.styleable.ShapeLayout_topLeftRadius, 0);
             topRightRadius = array.getDimension(R.styleable.ShapeLayout_topRightRadius, 0);
             bottomLeftRadius = array.getDimension(R.styleable.ShapeLayout_bottomLeftRadius, 0);

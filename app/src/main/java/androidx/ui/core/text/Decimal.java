@@ -18,7 +18,6 @@ public class Decimal {
     public static final int ROUND_HALF_EVEN = BigDecimal.ROUND_HALF_EVEN;
     public static final int ROUND_CEILING = BigDecimal.ROUND_CEILING;
     public static final int ROUND_UNNECESSARY = BigDecimal.ROUND_UNNECESSARY;
-
     /**
      * 小数点之前的长度
      */

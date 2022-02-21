@@ -115,7 +115,7 @@ public class Text {
         if (isEmpty(editText)) {
             return "";
         }
-        return "";
+        return editText.getText().toString();
     }
 
     /**

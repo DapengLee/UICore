@@ -119,6 +119,8 @@ public class AppFragment extends Fragment implements AppTransaction, AppLayout,A
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        contentView = view;
+        onInitViews();
         setPermission(new AppPermission(this, this));
         setAppTransactionImpl(new AppTransactionImpl(this));
         setLoading(new AppLoadingImpl(view.getContext()));

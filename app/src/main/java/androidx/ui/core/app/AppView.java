@@ -17,6 +17,12 @@ public interface AppView {
     void addClick(int... ids);
 
     /**
+     * 添加点击事件
+     * @param views
+     */
+    void addClick(View... views);
+
+    /**
      * 查找View
      *
      * @param clazz 类

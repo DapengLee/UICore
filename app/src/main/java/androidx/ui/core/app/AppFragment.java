@@ -337,6 +337,13 @@ public class AppFragment extends Fragment implements AppTransaction, AppLayout,A
     }
 
     @Override
+    public void addClick(View... views) {
+        for (int i = 0; i < views.length; i++) {
+            views[i].setOnClickListener(this);
+        }
+    }
+
+    @Override
     public <T extends View> T find(Class<T> clazz, int id) {
         return findViewById(id);
     }

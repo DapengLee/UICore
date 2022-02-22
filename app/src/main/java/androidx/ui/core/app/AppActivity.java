@@ -373,7 +373,7 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
      *
      * @param text 文字
      */
-    public void setTitle(String text) {
+    public void setAppActionBarTitle(String text) {
         getAppActionBar().setTitle(text);
     }
 

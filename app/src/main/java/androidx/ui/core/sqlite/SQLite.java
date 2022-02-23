@@ -578,17 +578,11 @@ public class SQLite implements OnSQLiteOpenListener {
             T bean = null;
             try {
                 bean = clazz.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            for (int i = 0; i < columnNames.length; i++) {
-                Field field = findField(clazz, columnNames[i]);
-                if (field != null) {
-                    field.setAccessible(true);
-                    Class fieldType = field.getType();
-                    try {
+                for (int i = 0; i < columnNames.length; i++) {
+                    Field field = findField(clazz, columnNames[i]);
+                    if (field != null) {
+                        field.setAccessible(true);
+                        Class fieldType = field.getType();
                         if (fieldType == String.class || fieldType == CharSequence.class) {
                             field.set(bean, cursor.getString(cursor.getColumnIndex(columnNames[i])));
                         }
@@ -612,14 +606,18 @@ public class SQLite implements OnSQLiteOpenListener {
                                 field.set(bean, false);
                             }
                         }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
                     }
                 }
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } finally {
+                if (bean != null) {
+                    list.add(bean);
+                }
             }
-            list.add(bean);
         }
-        cursor.close();
         return list;
     }
 
@@ -698,7 +696,7 @@ public class SQLite implements OnSQLiteOpenListener {
      * @param table
      */
     public void deleteTable(Class table) {
-        delete(table.getSimpleName());
+        deleteTable(table.getSimpleName());
     }
 
     /**

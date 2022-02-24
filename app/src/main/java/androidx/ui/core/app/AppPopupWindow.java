@@ -23,9 +23,11 @@ public abstract class AppPopupWindow extends PopupWindow implements View.OnClick
 
     private View contentView;
     private View cover;
+    private Context context;
 
     public AppPopupWindow(Context context) {
         super(context);
+        this.context = context;
         contentView = LayoutInflater.from(context).inflate(getContentLayoutResId(), null);
         setContentView(contentView);
         onViewCreated(contentView);
@@ -34,6 +36,13 @@ public abstract class AppPopupWindow extends PopupWindow implements View.OnClick
         setOutsideTouchable(true);
         setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         onViewCreated(contentView);
+    }
+
+    /**
+     * @return 上下文对象
+     */
+    public Context getContext() {
+        return context;
     }
 
     /**

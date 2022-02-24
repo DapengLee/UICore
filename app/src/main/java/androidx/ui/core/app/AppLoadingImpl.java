@@ -45,7 +45,7 @@ public class AppLoadingImpl extends AppDialog implements AppLoading {
     }
 
     @Override
-    public void onBindView(View contentView) {
+    public void onViewCreated(View contentView) {
         loadingGroupParentView = contentView.findViewById(R.id.android_loading_group_parent);
         loadingGroupView = contentView.findViewById(R.id.android_loading_group);
         loadingView = contentView.findViewById(R.id.android_loading);

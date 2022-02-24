@@ -193,6 +193,13 @@ public class SQLite implements OnSQLiteOpenListener {
     }
 
     /**
+     * @return 数据库操作对象
+     */
+    public SQLiteDatabase database() {
+        return db;
+    }
+
+    /**
      * 设置数据库打开监听监听
      *
      * @param listener
@@ -539,7 +546,7 @@ public class SQLite implements OnSQLiteOpenListener {
     public List<Map<String, String>> query(String sql) {
         Cursor cursor = db.rawQuery(sql, null);
         String[] columnNames = cursor.getColumnNames();
-        List<Map<String, String>> queryList = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> queryList = new ArrayList<>();
         while (cursor.moveToNext()) {
             Map<String, String> map = new HashMap<>();
             for (int i = 0; i < columnNames.length; i++) {

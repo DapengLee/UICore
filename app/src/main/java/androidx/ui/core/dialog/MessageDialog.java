@@ -61,7 +61,7 @@ public class MessageDialog extends AppDialog implements View.OnClickListener {
     }
 
     @Override
-    public void onBindView(View contentView) {
+    public void onViewCreated(View contentView) {
         tv_title = contentView.findViewById(R.id.tv_title);
         tv_content = contentView.findViewById(R.id.tv_content);
         v_horizontal_divider = contentView.findViewById(R.id.v_horizontal_divider);

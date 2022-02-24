@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.ui.core.R;
 
-public abstract class AppDialog extends Dialog {
+public abstract class AppDialog extends Dialog implements View.OnClickListener{
 
     /**
      * 占比100%
@@ -66,8 +66,8 @@ public abstract class AppDialog extends Dialog {
     protected void initialize(Context context) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         contentView = LayoutInflater.from(context).inflate(getContentLayoutResId(), null);
-        onBindView(contentView);
         setContentView(contentView);
+        onViewCreated(contentView);
         Window window = getWindow();
         window.setGravity(getGravity());
         window.setWindowAnimations(getWindowAnimationResId());
@@ -128,17 +128,7 @@ public abstract class AppDialog extends Dialog {
      *
      * @param contentView
      */
-    public abstract void onBindView(View contentView);
-
-    /**
-     * 获取控件
-     *
-     * @param id 控件id
-     * @return
-     */
-    public <T extends View> T find(@IdRes int id) {
-        return contentView.findViewById(id);
-    }
+    public abstract void onViewCreated(View contentView);
 
     /**
      * 通过屏幕比例获取宽度
@@ -160,5 +150,43 @@ public abstract class AppDialog extends Dialog {
         return (int) (getContext().getResources().getDisplayMetrics().heightPixels * scale);
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    /**
+     * 添加点击事件
+     * @param ids view ids
+     */
+    protected void addClick(int... ids) {
+        for (int i = 0; i < ids.length; i++) {
+            findViewById(ids[i]).setOnClickListener(this);
+        }
+    }
+
+    /**
+     * 添加点击事件
+     * @param views views
+     */
+    protected void addClick(View... views) {
+        for (int i = 0; i < views.length; i++) {
+            views[i].setOnClickListener(this);
+        }
+    }
+
+    /**
+     * 查找控件
+     *
+     * @param id  view id
+     * @param <T>
+     * @return
+     */
+    public final <T extends View> T findViewById(@IdRes int id) {
+        if (id == View.NO_ID) {
+            return null;
+        }
+        return contentView.findViewById(id);
+    }
 
 }

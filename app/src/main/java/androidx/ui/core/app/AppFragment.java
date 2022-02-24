@@ -282,17 +282,17 @@ public class AppFragment extends Fragment implements AppTransaction, AppLayout,A
     }
 
     @Override
-    public void onRequestPermissionsGranted(String[] permissions) {
+    public void onRequestPermissionsGranted(int requestCode,String[] permissions) {
 
     }
 
     @Override
-    public void onRequestPermissionsDenied(String[] permissions) {
+    public void onRequestPermissionsDenied(int requestCode,String[] permissions) {
 
     }
 
     @Override
-    public void onRequestPermissionRationale(String[] permissions) {
+    public void onRequestPermissionRationale(int requestCode,String[] permissions) {
 
     }
 

@@ -72,7 +72,7 @@ public class WheelPicker extends AppDialog implements View.OnClickListener {
     }
 
     @Override
-    public void onBindView(View contentView) {
+    public void onViewCreated(View contentView) {
         tv_cancel = contentView.findViewById(R.id.tv_cancel);
         tv_title = contentView.findViewById(R.id.tv_title);
         tv_confirm = contentView.findViewById(R.id.tv_confirm);

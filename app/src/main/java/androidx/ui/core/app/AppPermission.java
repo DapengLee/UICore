@@ -27,6 +27,13 @@ public class AppPermission {
      */
     public static final int REQUEST_CODE = 789;
     /**
+     * 内存权限
+     */
+    public final static String GROUP_STORAGE[] = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+    };
+    /**
      * 照相机权限
      */
     public final static String GROUP_CAMERA[] = {
@@ -186,7 +193,7 @@ public class AppPermission {
             if (disabled.size() > 0) {
                 Log.i(TAG, "disabled: " + disabled.toString());
                 if (listener != null) {
-                    listener.onRequestPermissionRationale(permissions);
+                    listener.onRequestPermissionRationale(requestCode,permissions);
                 }
             } else {
                 List<String> denied = checkDenied(permissions);
@@ -195,13 +202,13 @@ public class AppPermission {
                     activity.requestPermissions(toArray(denied), requestCode);
                 } else {
                     if (listener != null) {
-                        listener.onRequestPermissionsGranted(permissions);
+                        listener.onRequestPermissionsGranted(requestCode,permissions);
                     }
                 }
             }
         } else {
             if (listener != null) {
-                listener.onRequestPermissionsGranted(permissions);
+                listener.onRequestPermissionsGranted(requestCode,permissions);
             }
         }
     }
@@ -220,18 +227,18 @@ public class AppPermission {
         if (disabled.size() > 0) {
             Log.i(TAG, "disabled: " + disabled.toString());
             if (listener != null) {
-                listener.onRequestPermissionRationale(toArray(disabled));
+                listener.onRequestPermissionRationale(requestCode,toArray(disabled));
             }
         } else {
             List<String> denied = checkDenied(permissions);
             Log.i(TAG, "denied: " + denied.toString());
             if (denied.size() > 0) {
                 if (listener != null) {
-                    listener.onRequestPermissionsDenied(toArray(denied));
+                    listener.onRequestPermissionsDenied(requestCode,toArray(denied));
                 }
             } else {
                 if (listener != null) {
-                    listener.onRequestPermissionsGranted(permissions);
+                    listener.onRequestPermissionsGranted(requestCode,permissions);
                 }
             }
         }
@@ -264,21 +271,21 @@ public class AppPermission {
          *
          * @param permissions
          */
-        void onRequestPermissionsGranted(String[] permissions);
+        void onRequestPermissionsGranted(int requestCode,String[] permissions);
 
         /**
          * 已拒绝权限
          *
          * @param permissions
          */
-        void onRequestPermissionsDenied(String[] permissions);
+        void onRequestPermissionsDenied(int requestCode,String[] permissions);
 
         /**
          * 已禁止权限
          *
          * @param permissions
          */
-        void onRequestPermissionRationale(String[] permissions);
+        void onRequestPermissionRationale(int requestCode,String[] permissions);
 
     }
 

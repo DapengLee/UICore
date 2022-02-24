@@ -11,7 +11,7 @@
         android:background="#9D37BA"
         android:gravity="center"
         android:text="Delete"
-        android:textColor="@color/white"></TextView>
+        android:textColor="@android:color/white"></TextView>
 
     <TextView
         android:id="@+id/tv_edit"
@@ -20,7 +20,7 @@
         android:background="#2C90D2"
         android:gravity="center"
         android:text="Edit"
-        android:textColor="@color/white"></TextView>
+        android:textColor="@android:color/white"></TextView>
 
 
 </LinearLayout>

@@ -18,7 +18,7 @@ allprojects {
 2./app/build.grade
 ```
 dependencies {
-	implementation 'com.github.RelinRan:UICore:2022.2.24.1'
+	implementation 'com.github.RelinRan:UICore:2022.2.24.2'
 }
 ```
 ## AppActivity

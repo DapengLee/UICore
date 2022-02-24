@@ -153,4 +153,9 @@
         <attr name="itemCount" />
         <attr name="listItem" />
     </declare-styleable>
+    <!--SwipeRefreshLoading-->
+    <declare-styleable name="SwipeRefreshLoading">
+        <attr name="itemCount" />
+        <attr name="listItem" />
+    </declare-styleable>
 </resources>

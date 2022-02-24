@@ -375,13 +375,22 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
         AppToast.show(this, msg);
     }
 
-    /**
-     * 设置标题
-     *
-     * @param text 文字
-     */
-    public void setAppActionBarTitle(String text) {
-        getAppActionBar().setTitle(text);
+    @Override
+    public void setTitle(int titleId) {
+        super.setTitle(titleId);
+        getAppActionBar().setTitle(getResources().getString(titleId));
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        getAppActionBar().setTitle(title+"");
+    }
+
+    @Override
+    public void setTitleColor(int textColor) {
+        super.setTitleColor(textColor);
+        getAppActionBar().getTitleView().setTextColor(textColor);
     }
 
     /**

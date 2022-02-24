@@ -32,7 +32,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter implements
     /**
      * 空视图
      */
-    private View emptyView;
+    private View placeholder;
     /**
      * View容器
      */
@@ -100,8 +100,8 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter implements
     @Override
     public int getItemCount() {
         int itemCount = Size.of(data);
-        if (emptyView != null) {
-            emptyView.setVisibility(itemCount == 0 ? View.VISIBLE : View.GONE);
+        if (placeholder != null) {
+            placeholder.setVisibility(itemCount == 0 ? View.VISIBLE : View.GONE);
         }
         return itemCount;
     }
@@ -147,8 +147,8 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter implements
      */
     public void setItems(List<T> data, boolean notify) {
         this.data = data;
-        if (emptyView != null) {
-            emptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+        if (placeholder != null) {
+            placeholder.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
         if (notify) {
             notifyDataSetChanged();
@@ -330,17 +330,17 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter implements
      *
      * @return
      */
-    public View getEmptyView() {
-        return emptyView;
+    public View getPlaceholder() {
+        return placeholder;
     }
 
     /**
      * 设置空视图
      *
-     * @param emptyView 视图
+     * @param placeholder 视图
      */
-    public void setEmptyView(View emptyView) {
-        this.emptyView = emptyView;
+    public void setPlaceholder(View placeholder) {
+        this.placeholder = placeholder;
     }
 
     @Override

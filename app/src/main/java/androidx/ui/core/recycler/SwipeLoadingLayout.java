@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
-
 import androidx.ui.core.R;
 import androidx.ui.core.widget.LoadingView;
 
@@ -23,8 +22,6 @@ import androidx.ui.core.widget.LoadingView;
  */
 public class SwipeLoadingLayout extends LinearLayout implements NestedScrollView.OnScrollChangeListener {
 
-    public final String MORE = "加载更多";
-    public final String EMPTY = "无更多数据";
     /**
      * 是否正在加载
      */
@@ -118,9 +115,9 @@ public class SwipeLoadingLayout extends LinearLayout implements NestedScrollView
             lineLength = array.getDimension(R.styleable.SwipeLoadingLayout_lineLength, lineLength);
             loadingMarginRight = array.getDimensionPixelOffset(R.styleable.SwipeLoadingLayout_loadingMarginRight, loadingMarginRight);
             more = array.getString(R.styleable.SwipeLoadingLayout_more);
-            more = more == null ? MORE : more;
+            more = more == null ? context.getResources().getString(R.string.swipe_loading_layout_more) : more;
             empty = array.getString(R.styleable.SwipeLoadingLayout_empty);
-            empty = empty == null ? EMPTY : empty;
+            empty = empty == null ? context.getResources().getString(R.string.swipe_loading_layout_empty) : empty;
             textSize = array.getDimensionPixelSize(R.styleable.SwipeLoadingLayout_android_textSize, textSize);
             textColor = array.getColor(R.styleable.SwipeLoadingLayout_android_textColor, textColor);
             array.recycle();
@@ -209,6 +206,9 @@ public class SwipeLoadingLayout extends LinearLayout implements NestedScrollView
             setCircleVisibility(VISIBLE);
             setText(more);
             loadingView.start();
+            if (onLoadingListener != null) {
+                onLoadingListener.onLoading();
+            }
         } else {
             setCircleVisibility(GONE);
             setText(empty);
@@ -334,7 +334,7 @@ public class SwipeLoadingLayout extends LinearLayout implements NestedScrollView
     public void setOnLoadingListener(OnLoadingListener onLoadingListener) {
         this.onLoadingListener = onLoadingListener;
     }
-    
+
     public interface OnLoadingListener {
 
         /**
@@ -346,6 +346,9 @@ public class SwipeLoadingLayout extends LinearLayout implements NestedScrollView
 
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        if (onNestedScrollChangeListener != null) {
+            onNestedScrollChangeListener.onNestedScrollChange(v, scrollX, scrollY, oldScrollX, oldScrollY);
+        }
         onScrolledMore(v);
     }
 
@@ -364,15 +367,48 @@ public class SwipeLoadingLayout extends LinearLayout implements NestedScrollView
         }
         //列表中间位置
         if (isScrolledTop && isScrolledBottom) {
-            setLoading(true);
+            setLoading(false);
         }
         //滑动到底部情况
         if (isScrolledBottom && !isScrolledTop) {
             setLoading(true);
-            if (onLoadingListener != null) {
-                onLoadingListener.onLoading();
-            }
         }
+    }
+
+    /**
+     * 滚动监听
+     */
+    private OnNestedScrollChangeListener onNestedScrollChangeListener;
+
+    /**
+     * @return NestedScrollView 滚动监听
+     */
+    public OnNestedScrollChangeListener getOnNestedScrollChangeListener() {
+        return onNestedScrollChangeListener;
+    }
+
+    /**
+     * 设置NestedScrollView滚动监听
+     *
+     * @param onNestedScrollChangeListener NestedScrollView滚动监听
+     */
+    public void setOnNestedScrollChangeListener(OnNestedScrollChangeListener onNestedScrollChangeListener) {
+        this.onNestedScrollChangeListener = onNestedScrollChangeListener;
+    }
+
+    public interface OnNestedScrollChangeListener {
+
+        /**
+         * NestedScrollView滚动监听
+         *
+         * @param v          NestedScrollView
+         * @param scrollX    横向滑动距离
+         * @param scrollY    纵向滑动距离
+         * @param oldScrollX 旧横向滑动距离
+         * @param oldScrollY 旧纵向滑动距离
+         */
+        void onNestedScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY);
+
     }
 
 }

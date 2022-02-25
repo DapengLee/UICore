@@ -158,4 +158,10 @@
         <attr name="itemCount" />
         <attr name="listItem" />
     </declare-styleable>
+    <!--CardImage-->
+    <declare-styleable name="CardImage">
+        <attr name="android:src"/>
+        <attr name="android:scaleType"/>
+    </declare-styleable>
+
 </resources>

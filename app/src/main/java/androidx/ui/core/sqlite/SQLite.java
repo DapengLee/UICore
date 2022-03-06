@@ -30,24 +30,24 @@ public class SQLite implements OnSQLiteOpenListener {
     /**
      * 值是一个 NULL值
      */
-    public static final String FIELD_TYPE_NULL = "null";
+    public static final String FIELD_TYPE_NULL = "NULL";
     /**
      * 有符号整形，根据值的大小以1,2,3,4,6或8字节存放
      */
-    public static final String FIELD_TYPE_INTEGER = "integer";
+    public static final String FIELD_TYPE_INTEGER = "INTEGER";
     /**
      * 浮点型值，以8字节IEEE浮点数存放
      */
-    public static final String FIELD_TYPE_REAL = "real";
+    public static final String FIELD_TYPE_REAL = "REAL";
     /**
      * 数值型数据在被插入之前，需要先被转换为文本格式，之后再插入到目标字段中。
      * 文本字符串，使用数据库编码（UTF-8，UTF-16BE或者UTF-16LE）存放
      */
-    public static final String FIELD_TYPE_TEXT = "text";
+    public static final String FIELD_TYPE_TEXT = "TEXT";
     /**
      * 一个数据块，完全按照输入存放（即没有准换）
      */
-    public static final String FIELD_TYPE_BLOB = "blob";
+    public static final String FIELD_TYPE_BLOB = "BLOB";
     /**
      * 当文本数据被插入到亲缘性为NUMERIC的字段中时，如果转换操作不会导致数据信息丢失以及完全可逆，
      * 那么SQLite就会将该文本数据转换为INTEGER或REAL类型的数据，如果转换失败，SQLite仍会以TEXT方式存储该数据。

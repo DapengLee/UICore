@@ -166,6 +166,24 @@ public class SwipeRefreshLoading extends FrameLayout {
     }
 
     /**
+     * 设置布局管理器
+     *
+     * @param manager 布局管理器
+     */
+    public void setLayoutManager(LinearLayoutManager manager) {
+        recycler.setLayoutManager(manager);
+    }
+
+    /**
+     * 设置侧滑布局管理器
+     *
+     * @param manager 布局管理器
+     */
+    public void setSwipeLayoutManager(LinearLayoutManager manager) {
+        swipeRecycler.setLayoutManager(manager);
+    }
+
+    /**
      * 设置适配器
      *
      * @param adapter 适配器

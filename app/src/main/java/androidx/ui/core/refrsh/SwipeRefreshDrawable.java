@@ -43,6 +43,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import androidx.core.util.Preconditions;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.ui.core.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -90,9 +91,7 @@ public class SwipeRefreshDrawable extends Drawable implements Animatable {
     /**
      * 这是微调器中使用的默认颜色集。 {@关联 #setColorSchemeColors(int...)} 允许修改颜色。
      */
-    private static final int[] COLORS = new int[]{
-            Color.CYAN
-    };
+    private int[] COLORS;
 
     /**
      * 线性插值器中用于动画绘制的值颜色过渡应该开始
@@ -147,10 +146,9 @@ public class SwipeRefreshDrawable extends Drawable implements Animatable {
     @SuppressLint("RestrictedApi")
     public SwipeRefreshDrawable(@NonNull Context context) {
         mResources = Preconditions.checkNotNull(context).getResources();
-
         mRing = new Ring();
+        COLORS = new int[]{context.getResources().getColor(R.color.ui_core_theme_color)};
         mRing.setColors(COLORS);
-
         setStrokeWidth(STROKE_WIDTH);
         setupAnimators();
     }

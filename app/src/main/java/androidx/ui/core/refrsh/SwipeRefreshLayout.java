@@ -229,8 +229,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             out.writeByte(mRefreshing ? (byte) 1 : (byte) 0);
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
                     @Override
                     public SavedState createFromParcel(Parcel in) {
                         return new SavedState(in);

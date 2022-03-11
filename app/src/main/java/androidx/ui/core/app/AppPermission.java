@@ -72,6 +72,7 @@ public class AppPermission {
 
     /**
      * 权限构造函数
+     *
      * @param activity 页面
      * @param listener 权限请求监听
      */
@@ -82,6 +83,7 @@ public class AppPermission {
 
     /**
      * 权限构造函数
+     *
      * @param fragment 页面
      * @param listener 权限请求监听
      */
@@ -92,6 +94,7 @@ public class AppPermission {
 
     /**
      * 获取上下文
+     *
      * @return
      */
     public Context getContext() {
@@ -193,22 +196,27 @@ public class AppPermission {
             if (disabled.size() > 0) {
                 Log.i(TAG, "disabled: " + disabled.toString());
                 if (listener != null) {
-                    listener.onRequestPermissionRationale(requestCode,permissions);
+                    listener.onRequestPermissionRationale(requestCode, permissions);
                 }
             } else {
                 List<String> denied = checkDenied(permissions);
                 if (denied.size() > 0) {
                     Log.i(TAG, "denied: " + denied.toString());
-                    activity.requestPermissions(toArray(denied), requestCode);
+                    if (activity != null) {
+                        activity.requestPermissions(toArray(denied), requestCode);
+                    }
+                    if (fragment != null) {
+                        fragment.requestPermissions(toArray(denied), requestCode);
+                    }
                 } else {
                     if (listener != null) {
-                        listener.onRequestPermissionsGranted(requestCode,permissions);
+                        listener.onRequestPermissionsGranted(requestCode, permissions);
                     }
                 }
             }
         } else {
             if (listener != null) {
-                listener.onRequestPermissionsGranted(requestCode,permissions);
+                listener.onRequestPermissionsGranted(requestCode, permissions);
             }
         }
     }
@@ -227,18 +235,18 @@ public class AppPermission {
         if (disabled.size() > 0) {
             Log.i(TAG, "disabled: " + disabled.toString());
             if (listener != null) {
-                listener.onRequestPermissionRationale(requestCode,toArray(disabled));
+                listener.onRequestPermissionRationale(requestCode, toArray(disabled));
             }
         } else {
             List<String> denied = checkDenied(permissions);
             Log.i(TAG, "denied: " + denied.toString());
             if (denied.size() > 0) {
                 if (listener != null) {
-                    listener.onRequestPermissionsDenied(requestCode,toArray(denied));
+                    listener.onRequestPermissionsDenied(requestCode, toArray(denied));
                 }
             } else {
                 if (listener != null) {
-                    listener.onRequestPermissionsGranted(requestCode,permissions);
+                    listener.onRequestPermissionsGranted(requestCode, permissions);
                 }
             }
         }
@@ -271,21 +279,21 @@ public class AppPermission {
          *
          * @param permissions
          */
-        void onRequestPermissionsGranted(int requestCode,String[] permissions);
+        void onRequestPermissionsGranted(int requestCode, String[] permissions);
 
         /**
          * 已拒绝权限
          *
          * @param permissions
          */
-        void onRequestPermissionsDenied(int requestCode,String[] permissions);
+        void onRequestPermissionsDenied(int requestCode, String[] permissions);
 
         /**
          * 已禁止权限
          *
          * @param permissions
          */
-        void onRequestPermissionRationale(int requestCode,String[] permissions);
+        void onRequestPermissionRationale(int requestCode, String[] permissions);
 
     }
 

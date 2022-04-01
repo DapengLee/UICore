@@ -1,5 +1,7 @@
 package androidx.ui.core.app;
 
+import android.util.Log;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -7,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * 应用碎片管理<br/>
@@ -30,7 +33,7 @@ public class AppFragmentManager {
     /**
      * 碎片集合
      */
-    private List<Fragment> fragments;
+    private Stack<Fragment> stack;
 
     /**
      * 应用碎片管理
@@ -39,7 +42,7 @@ public class AppFragmentManager {
      */
     public AppFragmentManager(AppLayout appLayout) {
         this.appLayout = appLayout;
-        fragments = new ArrayList<>();
+        stack = new Stack<>();
     }
 
     /**
@@ -99,6 +102,19 @@ public class AppFragmentManager {
     }
 
     /**
+     * @param fragment 碎片View
+     * @return 在栈内是否存在类型Fragment
+     */
+    public boolean hasStackFragment(Fragment fragment) {
+        for (Fragment item : stack) {
+            if (fragment.getClass() == item.getClass()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Fragment事务处理
      *
      * @param type           类型{@link #ADD} OR {@link #REPLACE}
@@ -106,20 +122,21 @@ public class AppFragmentManager {
      * @param addToBackStack 是否添加到回退栈
      */
     public void transaction(int type, Fragment fragment, boolean addToBackStack) {
-        fragments.add(fragment);
-        String tag = fragment.getClass().getSimpleName();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        String tag = String.valueOf(System.currentTimeMillis());
         if (type == ADD) {
-            if (!fragment.isAdded()) {
-                transaction.add(getContainerViewResId(),fragment, tag);
-            } else {
-                Iterator iterator = fragments.iterator();
-                while (iterator.hasNext()) {
-                    Fragment next = (Fragment) iterator.next();
-                    transaction.hide(next);
+            if (fragment.isAdded() || hasStackFragment(fragment)) {
+                for (Fragment item : stack) {
+                    if (fragment.getClass() == item.getClass()) {
+                        item.onResume();
+                        transaction.show(item);
+                    } else {
+                        transaction.hide(item);
+                    }
                 }
-                fragment.onResume();
-                transaction.show(fragment);
+            } else {
+                stack.push(fragment);
+                transaction.add(getContainerViewResId(), fragment, tag);
             }
         }
         if (type == REPLACE) {

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--AppActionBar-->
+    <dimen name="app_action_bar_title_text_size">16sp</dimen>
+    <dimen name="app_action_bar_back_text_size">16sp</dimen>
+    <dimen name="app_action_bar_menu_text_size">14sp</dimen>
+    <dimen name="app_action_bar_menu_number_text_size">10sp</dimen>
     <!--Loading-->
     <dimen name="loading_group_padding_horizontal">15dp</dimen>
     <dimen name="loading_group_background_radius">5sp</dimen>

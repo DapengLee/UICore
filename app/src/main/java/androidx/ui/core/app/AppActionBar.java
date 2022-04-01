@@ -6,6 +6,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +16,6 @@ import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import androidx.ui.core.R;
 import androidx.ui.core.type.Position;
 
@@ -34,6 +34,7 @@ public class AppActionBar implements View.OnClickListener {
     private TextView titleView;
     private ImageView menuIconView;
     private TextView menuTextView;
+    private TextView menuNumberTextView;
 
     public AppActionBar(AppCompatActivity activity) {
         this.activity = activity;
@@ -126,6 +127,8 @@ public class AppActionBar implements View.OnClickListener {
         titleView = contentView.findViewById(R.id.app_action_bar_title);
         menuIconView = contentView.findViewById(R.id.app_action_bar_menu_icon);
         menuTextView = contentView.findViewById(R.id.app_action_bar_menu_text);
+        menuNumberTextView = contentView.findViewById(R.id.app_action_bar_menu_number);
+        menuNumberTextView.setVisibility(View.INVISIBLE);
         backIconView.setOnClickListener(this);
         backTextView.setOnClickListener(this);
         titleView.setOnClickListener(this);
@@ -184,6 +187,52 @@ public class AppActionBar implements View.OnClickListener {
         if (position == Position.BOTTOM) {
             v.setPadding(leftPadding, topPadding, rightPadding, padding);
         }
+    }
+
+    /**
+     * 设置View外间距
+     *
+     * @param v        控件
+     * @param position 位置{@link Position#ALL}
+     * @param margin   间距
+     */
+    public void setViewMargin(View v, Position position, int margin) {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+        int leftMargin = params.leftMargin;
+        int topMargin = params.topMargin;
+        int rightMargin = params.rightMargin;
+        int bottomMargin = params.bottomMargin;
+        if (position == Position.ALL) {
+            leftMargin = margin;
+            topMargin = margin;
+            rightMargin = margin;
+            bottomMargin = margin;
+        }
+        if (position == Position.HORIZONTAL) {
+            leftMargin = margin;
+            rightMargin = margin;
+        }
+        if (position == Position.VERTICAL) {
+            topMargin = margin;
+            bottomMargin = margin;
+        }
+        if (position == Position.LEFT) {
+            leftMargin = margin;
+        }
+        if (position == Position.TOP) {
+            topMargin = margin;
+        }
+        if (position == Position.RIGHT) {
+            rightMargin = margin;
+        }
+        if (position == Position.BOTTOM) {
+            bottomMargin = margin;
+        }
+        params.leftMargin = leftMargin;
+        params.topMargin = topMargin;
+        params.rightMargin = rightMargin;
+        params.bottomMargin = bottomMargin;
+        v.setLayoutParams(params);
     }
 
     /**
@@ -345,6 +394,16 @@ public class AppActionBar implements View.OnClickListener {
     }
 
     /**
+     * 返回文字外间距
+     *
+     * @param position 位置{@link Position#ALL}
+     * @param margin   间距
+     */
+    public void setBackTextMargin(Position position, int margin) {
+        setViewMargin(backTextView, position, margin);
+    }
+
+    /**
      * 获取标题View
      *
      * @return
@@ -409,6 +468,16 @@ public class AppActionBar implements View.OnClickListener {
     }
 
     /**
+     * 设置菜单按钮外间距
+     *
+     * @param position 位置{@link Position#ALL}
+     * @param margin   间距
+     */
+    public void setMenuIconMargin(Position position, int margin) {
+        setViewMargin(menuIconView, position, margin);
+    }
+
+    /**
      * 获取菜单文字View
      *
      * @return
@@ -452,6 +521,83 @@ public class AppActionBar implements View.OnClickListener {
      */
     public void setMenuTextPadding(Position position, int padding) {
         setViewPadding(menuTextView, position, padding);
+    }
+
+    /**
+     * 设置菜单文字外间距
+     *
+     * @param position 位置{@link Position#ALL}
+     * @param margin   间距
+     */
+    public void setMenuTextMargin(Position position, int margin) {
+        setViewMargin(menuTextView, position, margin);
+    }
+
+    /**
+     * 设置菜单文字
+     *
+     * @param visibility 是否可见
+     */
+    public void setMenuNumberVisibility(int visibility) {
+        menuNumberTextView.setVisibility(visibility);
+    }
+
+    /**
+     * 设置菜单文字
+     *
+     * @param text 文字
+     */
+    public void setMenuNumberText(String text) {
+        menuNumberTextView.setText(text);
+    }
+
+    /**
+     * 设置菜单文字
+     *
+     * @param text       文字
+     * @param visibility 是否可见
+     */
+    public void setMenuNumberText(String text, int visibility) {
+        menuNumberTextView.setText(text);
+        menuNumberTextView.setVisibility(visibility);
+    }
+
+    /**
+     * 设置菜单数量文字大小
+     *
+     * @param size 大小
+     */
+    public void setMenuNumberTextSize(int size) {
+        menuNumberTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+    }
+
+    /**
+     * 设置菜单数量文字颜色
+     *
+     * @param color 颜色值
+     */
+    public void setMenuNumberTextColor(@ColorInt int color) {
+        menuNumberTextView.setTextColor(color);
+    }
+
+    /**
+     * 设置菜单数量内间距
+     *
+     * @param position 位置{@link Position#ALL}
+     * @param padding  间距
+     */
+    public void setMenuNumberTextPadding(Position position, int padding) {
+        setViewPadding(menuNumberTextView, position, padding);
+    }
+
+    /**
+     * 设置菜单数量外间距
+     *
+     * @param position 位置{@link Position#ALL}
+     * @param margin   间距
+     */
+    public void setMenuNumberTextMargin(Position position, int margin) {
+        setViewPadding(menuNumberTextView, position, margin);
     }
 
     /**

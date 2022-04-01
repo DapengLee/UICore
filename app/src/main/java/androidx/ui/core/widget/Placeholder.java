@@ -78,6 +78,8 @@ public class Placeholder extends FrameLayout {
     public Placeholder(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttributeSet(context, attrs);
+        int backgroundColor = context.getResources().getColor(R.color.ui_core_placeholder_background_color);
+        setBackgroundColor(backgroundColor);
     }
 
     /**

@@ -2,6 +2,8 @@
 <resources>
     <!--Theme-->
     <color name="ui_core_theme_color">#26C9B7</color>
+    <color name="ui_core_dot_color">#FF0014</color>
+    <color name="ui_core_placeholder_background_color">#F8F8F8</color>
     <!--Loading-->
     <color name="loading_group_parent_background">#00000000</color>
     <color name="loading_group_background">#FFFFFF</color>

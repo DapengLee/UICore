@@ -247,6 +247,11 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
     }
 
     @Override
+    public Fragment getCurrentFragment() {
+        return transaction.getCurrentFragment();
+    }
+
+    @Override
     public boolean isLogin() {
         return transaction.isLogin();
     }

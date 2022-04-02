@@ -50,6 +50,11 @@ public interface AppTransaction {
     void addFragment(Class<? extends Fragment> cls, Bundle options);
 
     /**
+     * @return 当前操作的Fragment
+     */
+    Fragment getCurrentFragment();
+
+    /**
      * 是否登录
      *
      * @return

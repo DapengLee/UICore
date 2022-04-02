@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.ui.core.R;
 import androidx.ui.core.content.ShareData;
 
+import java.util.Stack;
+
 /**
  * 应用事务实现类<br/>
  * 实现AppTransaction接口，处理Activity和Fragment公共逻辑，例如Fragment维护、登录状态、网路令牌。<br/>
@@ -107,23 +109,18 @@ public class AppTransactionImpl implements AppTransaction {
     }
 
     @Override
-    public void addFragment(Class<? extends Fragment> cls) {
-        addFragment(cls, null);
+    public void addFragment(Class<? extends Fragment> clazz) {
+        addFragment(clazz, null);
     }
 
     @Override
-    public void addFragment(Class<? extends Fragment> cls, Bundle options) {
-        try {
-            Fragment fragment = cls.newInstance();
-            if (options != null) {
-                fragment.setArguments(options);
-            }
-            fragmentManager.add(fragment);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+    public void addFragment(Class<? extends Fragment> clazz, Bundle options) {
+        fragmentManager.add(clazz,options);
+    }
+
+    @Override
+    public Fragment getCurrentFragment() {
+        return fragmentManager.getCurrentFragment();
     }
 
     @Override

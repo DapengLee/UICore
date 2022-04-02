@@ -221,6 +221,11 @@ public class AppFragment extends Fragment implements AppTransaction, AppLayout,A
     }
 
     @Override
+    public Fragment getCurrentFragment() {
+        return transaction.getCurrentFragment();
+    }
+
+    @Override
     public boolean isLogin() {
         return transaction.isLogin();
     }

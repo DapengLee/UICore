@@ -1,14 +1,12 @@
 package androidx.ui.core.app;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -34,6 +32,8 @@ public class AppFragmentManager {
      * 碎片集合
      */
     private Stack<Fragment> stack;
+
+    private Fragment currentFragment;
 
     /**
      * 应用碎片管理
@@ -83,6 +83,54 @@ public class AppFragmentManager {
     }
 
     /**
+     * 找到Stack里面的Fragment
+     *
+     * @param clazz Fragment的类
+     * @return
+     */
+    public Fragment findStackFragment(Class<? extends Fragment> clazz) {
+        for (int i = 0; i < stack.size(); i++) {
+            if (clazz == stack.get(i).getClass()) {
+                return stack.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 添加Fragment
+     *
+     * @param clazz 碎片
+     */
+    public void add(Class<? extends Fragment> clazz) {
+        add(clazz, null);
+    }
+
+    /**
+     * 添加Fragment
+     *
+     * @param clazz   碎片
+     * @param options 参数
+     */
+    public void add(Class<? extends Fragment> clazz, Bundle options) {
+        try {
+            Fragment fragment = findStackFragment(clazz);
+            if (fragment == null) {
+                fragment = clazz.newInstance();
+                stack.push(fragment);
+            }
+            if (options != null) {
+                fragment.setArguments(options);
+            }
+            add(fragment);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 替换碎片
      *
      * @param fragment 碎片
@@ -102,16 +150,27 @@ public class AppFragmentManager {
     }
 
     /**
-     * @param fragment 碎片View
-     * @return 在栈内是否存在类型Fragment
+     * 替换Fragment
+     *
+     * @param clazz   碎片
+     * @param options 参数
      */
-    public boolean hasStackFragment(Fragment fragment) {
-        for (Fragment item : stack) {
-            if (fragment.getClass() == item.getClass()) {
-                return true;
+    public void replace(Class<? extends Fragment> clazz, Bundle options) {
+        try {
+            Fragment fragment = findStackFragment(clazz);
+            if (fragment == null) {
+                fragment = clazz.newInstance();
+                stack.push(fragment);
             }
+            if (options != null) {
+                fragment.setArguments(options);
+            }
+            replace(fragment);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
-        return false;
     }
 
     /**
@@ -125,17 +184,22 @@ public class AppFragmentManager {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         String tag = String.valueOf(System.currentTimeMillis());
         if (type == ADD) {
-            if (fragment.isAdded() || hasStackFragment(fragment)) {
+            if (fragment.isAdded()) {
                 for (Fragment item : stack) {
-                    if (fragment.getClass() == item.getClass()) {
+                    if (fragment.getTag().equals(item.getTag())) {
+                        Log.i("RRL", "======1=======>");
                         item.onResume();
                         transaction.show(item);
+                        currentFragment = item;
                     } else {
+                        Log.i("RRL", "======2=======>");
                         transaction.hide(item);
                     }
                 }
             } else {
+                Log.i("RRL", "======3=======>");
                 stack.push(fragment);
+                currentFragment = fragment;
                 transaction.add(getContainerViewResId(), fragment, tag);
             }
         }
@@ -146,6 +210,13 @@ public class AppFragmentManager {
             transaction.addToBackStack(tag);
         }
         transaction.commitAllowingStateLoss();
+    }
+
+    /**
+     * @return 当前操作Fragment
+     */
+    public Fragment getCurrentFragment() {
+        return currentFragment;
     }
 
     /**

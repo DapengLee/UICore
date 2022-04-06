@@ -2,6 +2,7 @@ package androidx.ui.core.app;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -548,7 +549,9 @@ public class AppActionBar implements View.OnClickListener {
      * @param text 文字
      */
     public void setMenuNumberText(String text) {
+        text = TextUtils.isEmpty(text) ? "0" : text;
         menuNumberTextView.setText(text);
+        menuNumberTextView.setVisibility(text.equals("0") ? View.GONE : View.VISIBLE);
     }
 
     /**
@@ -558,6 +561,7 @@ public class AppActionBar implements View.OnClickListener {
      * @param visibility 是否可见
      */
     public void setMenuNumberText(String text, int visibility) {
+        text = TextUtils.isEmpty(text) ? "0" : text;
         menuNumberTextView.setText(text);
         menuNumberTextView.setVisibility(visibility);
     }
@@ -597,7 +601,7 @@ public class AppActionBar implements View.OnClickListener {
      * @param margin   间距
      */
     public void setMenuNumberTextMargin(Position position, int margin) {
-        setViewPadding(menuNumberTextView, position, margin);
+        setViewMargin(menuNumberTextView, position, margin);
     }
 
     /**

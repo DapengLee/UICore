@@ -2,6 +2,9 @@ package androidx.ui.core.content;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import androidx.ui.core.app.AppPackageManager;
 
 import java.util.Set;
 
@@ -11,6 +14,7 @@ import java.util.Set;
 public class ShareData {
 
     private static final String SHARE_PREFERENCE_NAME = "_SP_DATA";
+    private static final String TAG = ShareData.class.getSimpleName();
 
     /**
      * 数据存储构造函数
@@ -29,7 +33,9 @@ public class ShareData {
             return null;
         }
         String PACKAGE_NAME = context.getApplicationContext().getPackageName().replace(".", "_").toUpperCase();
-        return context.getSharedPreferences(PACKAGE_NAME + SHARE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String name = PACKAGE_NAME + AppPackageManager.getVersionCode(context) + SHARE_PREFERENCE_NAME;
+        Log.i(TAG, "->getSharedPreferences name = " + name);
+        return context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 
     /**

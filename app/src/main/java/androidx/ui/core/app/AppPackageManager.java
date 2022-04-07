@@ -1,5 +1,6 @@
 package androidx.ui.core.app;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -44,7 +46,7 @@ public class AppPackageManager {
      * @return 属于桌面的应用的应用包名称
      */
     public static List<String> getDesktopPackages(Context context) {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         PackageManager packageManager = context.getPackageManager();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -267,18 +269,51 @@ public class AppPackageManager {
      * @param authority 权限
      * @param file      apk文件
      */
-    public static void installApk(Context context, String authority, File file) {
+    protected static void installApk(Context context, String authority, File file) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             uri = FileProvider.getUriForFile(context, authority, file);
         } else {
             uri = Uri.fromFile(file);
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    /**
+     * @param context 上下文
+     * @return 是否能安装apk
+     */
+    public static boolean canRequestPackageInstalls(Context context) {
+        return context.getPackageManager().canRequestPackageInstalls();
+    }
+
+    /**
+     * 请求安装apk
+     *
+     * @param context   上下文对象
+     * @param authority 权限
+     * @param file      apk文件
+     */
+    public static boolean requestPackageInstalls(Context context, String authority, File file) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (context.getPackageManager().canRequestPackageInstalls()) {
+                installApk(context, authority, file);
+                return true;
+            } else {
+                Uri packageUri = Uri.parse("package:" + context.getPackageName());
+                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return false;
+            }
+        } else {
+            installApk(context, authority, file);
+            return true;
+        }
     }
 
     /**

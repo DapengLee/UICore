@@ -33,8 +33,8 @@ public class ShareData {
             return null;
         }
         String PACKAGE_NAME = context.getApplicationContext().getPackageName().replace(".", "_").toUpperCase();
-        String name = PACKAGE_NAME + AppPackageManager.getVersionCode(context) + SHARE_PREFERENCE_NAME;
-        Log.i(TAG, "->getSharedPreferences name = " + name);
+        String name = PACKAGE_NAME +"_"+ AppPackageManager.getVersionCode(context) + SHARE_PREFERENCE_NAME;
+        Log.i(TAG, "->name = " + name);
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 

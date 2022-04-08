@@ -319,6 +319,14 @@ public class CarouselPager extends FrameLayout implements ViewPager.OnPageChange
     }
 
     /**
+     * 设置是否循环
+     * @param cycle 是否循环
+     */
+    public void setCycle(boolean cycle) {
+        this.cycle = cycle;
+    }
+
+    /**
      * 滚动位置
      */
     private long scrolledPosition = 1;

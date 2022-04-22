@@ -1,5 +1,8 @@
 package androidx.ui.core.app;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -84,12 +87,14 @@ public interface AppTransaction {
 
     /**
      * 设置用户信息
+     *
      * @param json json数据
      */
     void setUserInfo(String json);
 
     /**
      * 获取用户信息
+     *
      * @return
      */
     String getUserInfo();
@@ -132,5 +137,15 @@ public interface AppTransaction {
      * @param options     参数
      */
     void startActivityForResult(Class<?> cls, int requestCode, Bundle options);
+
+    /**
+     * 处理页面结果
+     *
+     * @param activity    页面
+     * @param requestCode 请求代码
+     * @param resultCode  结果代码
+     * @param data        数据
+     */
+    void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data);
 
 }

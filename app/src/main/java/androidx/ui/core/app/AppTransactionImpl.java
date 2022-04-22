@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
@@ -115,7 +116,7 @@ public class AppTransactionImpl implements AppTransaction {
 
     @Override
     public void addFragment(Class<? extends Fragment> clazz, Bundle options) {
-        fragmentManager.add(clazz,options);
+        fragmentManager.add(clazz, options);
     }
 
     @Override
@@ -206,6 +207,12 @@ public class AppTransactionImpl implements AppTransaction {
         if (getAppFragment() != null) {
             getAppFragment().startActivityForResult(intent, requestCode);
         }
+    }
+
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        Log.i(AppTransactionImpl.class.getSimpleName(),"requestCode = "+requestCode+",resultCode = "+resultCode);
+        AppPackage.onActivityResult(activity, requestCode, requestCode, data);
     }
 
 }

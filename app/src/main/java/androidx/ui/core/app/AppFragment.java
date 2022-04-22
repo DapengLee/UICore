@@ -1,5 +1,6 @@
 package androidx.ui.core.app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +17,7 @@ import androidx.fragment.app.FragmentManager;
 /**
  * 应用程序 - Fragment
  */
-public class AppFragment extends Fragment implements AppTransaction, AppLayout,AppView, AppPlaceholder, AppPermission.OnRequestPermissionsListener, AppLoading,View.OnClickListener {
+public class AppFragment extends Fragment implements AppTransaction, AppLayout, AppView, AppPlaceholder, AppPermission.OnRequestPermissionsListener, AppLoading, View.OnClickListener {
 
     private View contentView;
     private AppTransaction transaction;
@@ -281,23 +282,34 @@ public class AppFragment extends Fragment implements AppTransaction, AppLayout,A
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        onActivityResult(getActivity(), requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        transaction.onActivityResult(activity, requestCode, resultCode, data);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permission.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
-    public void onRequestPermissionsGranted(int requestCode,String[] permissions) {
+    public void onRequestPermissionsGranted(int requestCode, String[] permissions) {
 
     }
 
     @Override
-    public void onRequestPermissionsDenied(int requestCode,String[] permissions) {
+    public void onRequestPermissionsDenied(int requestCode, String[] permissions) {
 
     }
 
     @Override
-    public void onRequestPermissionRationale(int requestCode,String[] permissions) {
+    public void onRequestPermissionRationale(int requestCode, String[] permissions) {
 
     }
 
@@ -318,6 +330,7 @@ public class AppFragment extends Fragment implements AppTransaction, AppLayout,A
 
     /**
      * 显示提示
+     *
      * @param msg 内容
      */
     public void showToast(String msg) {

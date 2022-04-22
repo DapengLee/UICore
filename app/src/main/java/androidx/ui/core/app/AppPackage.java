@@ -15,7 +15,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.ui.core.util.Size;
 
@@ -29,7 +28,15 @@ public class AppPackage {
     /**
      * 安装Apk请求代码
      */
-    public static final int REQUEST_INSTALL = 1581;
+    public static int REQUEST_CODE_INSTALL = -1;
+    /**
+     * 安装ApK授权
+     */
+    public static String AUTHORITY;
+    /**
+     * 安装Apk文件
+     */
+    public static File APK;
 
     /**
      * @param context 是否是桌面
@@ -274,7 +281,7 @@ public class AppPackage {
      * @param authority 权限
      * @param file      apk文件
      */
-    protected static void installApk(Context context, String authority, File file) {
+    public static void installPackage(Context context, String authority, File file) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
@@ -300,42 +307,62 @@ public class AppPackage {
     }
 
     /**
-     * 管理未知应用
+     * 管理未知来源
      *
-     * @param activity 页面
+     * @param activity    页面
      * @param requestCode 请求码
      */
     public static void manageUnknownAppSources(Activity activity, int requestCode) {
         Uri packageUri = Uri.parse("package:" + activity.getPackageName());
         Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivityForResult(intent, requestCode);
+    }
+
+    /**
+     * @param requestCode 请求代码
+     * @param resultCode  结果代码
+     * @return 是否未知来源apk请求
+     */
+    public static boolean isUnknownAppSourcesInstallRequest(int requestCode, int resultCode) {
+        return requestCode == REQUEST_CODE_INSTALL && resultCode == Activity.RESULT_OK;
+    }
+
+    /**
+     * 处理结果
+     *
+     * @param activity    页面
+     * @param requestCode 请求代码
+     * @param resultCode  结果代码
+     * @param data        数据
+     */
+    public static void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        if (isUnknownAppSourcesInstallRequest(requestCode, resultCode) && canRequestPackageInstalls(activity)&&APK!=null) {
+            installPackage(activity, AUTHORITY, APK);
+        }
     }
 
     /**
      * 请求安装apk
      * 注意：声明权限 REQUEST_INSTALL_PACKAGES
      *
-     * @param activity    页面
-     * @param authority   权限
-     * @param requestCode 为止来源安装权限请求代码，请求结果在onActivityResult(int, int, Intent)}
-     * @param file        apk文件
+     * @param activity  页面
+     * @param authority 权限
+     * @param file      apk文件
      */
-    public static boolean installApk(Activity activity, String authority, int requestCode, File file) {
+    public static boolean installApk(Activity activity, String authority, File file) {
+        AUTHORITY = authority;
+        APK = file;
         Context appContext = activity.getApplicationContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (canRequestPackageInstalls(appContext)) {
-                installApk(appContext, authority, file);
+                installPackage(appContext, authority, file);
                 return true;
             } else {
-                Uri packageUri = Uri.parse("package:" + appContext.getPackageName());
-                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                activity.startActivityForResult(intent, requestCode);
+                manageUnknownAppSources(activity, REQUEST_CODE_INSTALL);
                 return false;
             }
         } else {
-            installApk(appContext, authority, file);
+            installPackage(appContext, authority, file);
             return true;
         }
     }

@@ -1,5 +1,6 @@
 package androidx.ui.core.app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -305,6 +306,17 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
     @Override
     public void startActivityForResult(Class<?> cls, int requestCode, Bundle options) {
         transaction.startActivityForResult(cls, requestCode, options);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        onActivityResult(this, resultCode, resultCode, data);
+    }
+
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        transaction.onActivityResult(activity, requestCode, resultCode, data);
     }
 
     @Override

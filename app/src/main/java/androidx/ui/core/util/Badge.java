@@ -10,7 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.ui.core.app.AppPackageManager;
+import androidx.ui.core.app.AppPackage;
 import androidx.ui.core.content.ShareData;
 
 import java.lang.reflect.Field;
@@ -100,10 +100,10 @@ public class Badge {
         Log.i(Badge.class.getSimpleName(), "mobile system:" + Build.MANUFACTURER.toLowerCase());
         if (number > -1) {
             if (packageName == null) {
-                packageName = AppPackageManager.getPackageName(context);
+                packageName = AppPackage.getPackageName(context);
             }
             if (launcherClassName == null) {
-                launcherClassName = AppPackageManager.getLauncherClassName(context);
+                launcherClassName = AppPackage.getLauncherClassName(context);
             }
             Log.i(Badge.class.getSimpleName(), "packageName:" + packageName);
             Log.i(Badge.class.getSimpleName(), "launcherClassName:" + launcherClassName);

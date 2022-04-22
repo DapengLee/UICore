@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.ui.core.util.Size;
 
@@ -22,9 +23,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppPackageManager {
+public class AppPackage {
 
-    public static final String TAG = AppPackageManager.class.getSimpleName();
+    public static final String TAG = AppPackage.class.getSimpleName();
+    /**
+     * 安装Apk请求代码
+     */
+    public static final int REQUEST_INSTALL = 1581;
 
     /**
      * @param context 是否是桌面
@@ -288,30 +293,35 @@ public class AppPackageManager {
      * @return 是否能安装apk
      */
     public static boolean canRequestPackageInstalls(Context context) {
-        return context.getPackageManager().canRequestPackageInstalls();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return context.getApplicationContext().getPackageManager().canRequestPackageInstalls();
+        }
+        return true;
     }
 
     /**
      * 请求安装apk
-     *
-     * @param context   上下文对象
-     * @param authority 权限
-     * @param file      apk文件
+     * 注意：声明权限 REQUEST_INSTALL_PACKAGES
+     * @param activity    页面
+     * @param authority   权限
+     * @param requestCode 为止来源安装权限请求代码，请求结果在{@link Activity#onActivityResult(int, int, Intent)}
+     * @param file        apk文件
      */
-    public static boolean requestPackageInstalls(Context context, String authority, File file) {
+    public static boolean installApkCompat(Activity activity, String authority,int requestCode, File file) {
+        Context context = activity.getApplicationContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (context.getPackageManager().canRequestPackageInstalls()) {
-                installApk(context, authority, file);
+            if (canRequestPackageInstalls(activity)) {
+                installApk(activity, authority, file);
                 return true;
             } else {
                 Uri packageUri = Uri.parse("package:" + context.getPackageName());
                 Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                activity.startActivityForResult(intent, requestCode);
                 return false;
             }
         } else {
-            installApk(context, authority, file);
+            installApk(activity, authority, file);
             return true;
         }
     }

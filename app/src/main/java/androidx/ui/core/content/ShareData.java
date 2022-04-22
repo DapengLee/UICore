@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import androidx.ui.core.app.AppPackageManager;
+import androidx.ui.core.app.AppPackage;
 
 import java.util.Set;
 
@@ -33,7 +33,7 @@ public class ShareData {
             return null;
         }
         String PACKAGE_NAME = context.getApplicationContext().getPackageName().replace(".", "_").toUpperCase();
-        String name = PACKAGE_NAME +"_"+ AppPackageManager.getVersionCode(context) + SHARE_PREFERENCE_NAME;
+        String name = PACKAGE_NAME +"_"+ AppPackage.getVersionCode(context) + SHARE_PREFERENCE_NAME;
         Log.i(TAG, "->name = " + name);
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }

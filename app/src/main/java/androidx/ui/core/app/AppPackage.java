@@ -300,28 +300,42 @@ public class AppPackage {
     }
 
     /**
+     * 管理未知应用
+     *
+     * @param activity 页面
+     * @param requestCode 请求码
+     */
+    public static void manageUnknownAppSources(Activity activity, int requestCode) {
+        Uri packageUri = Uri.parse("package:" + activity.getPackageName());
+        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+    /**
      * 请求安装apk
      * 注意：声明权限 REQUEST_INSTALL_PACKAGES
+     *
      * @param activity    页面
      * @param authority   权限
-     * @param requestCode 为止来源安装权限请求代码，请求结果在{@link Activity#onActivityResult(int, int, Intent)}
+     * @param requestCode 为止来源安装权限请求代码，请求结果在onActivityResult(int, int, Intent)}
      * @param file        apk文件
      */
-    public static boolean installApkCompat(Activity activity, String authority,int requestCode, File file) {
-        Context context = activity.getApplicationContext();
+    public static boolean installApk(Activity activity, String authority, int requestCode, File file) {
+        Context appContext = activity.getApplicationContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (canRequestPackageInstalls(activity)) {
-                installApk(activity, authority, file);
+            if (canRequestPackageInstalls(appContext)) {
+                installApk(appContext, authority, file);
                 return true;
             } else {
-                Uri packageUri = Uri.parse("package:" + context.getPackageName());
+                Uri packageUri = Uri.parse("package:" + appContext.getPackageName());
                 Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivityForResult(intent, requestCode);
                 return false;
             }
         } else {
-            installApk(activity, authority, file);
+            installApk(appContext, authority, file);
             return true;
         }
     }

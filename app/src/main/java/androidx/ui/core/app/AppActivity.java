@@ -2,6 +2,7 @@ package androidx.ui.core.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
@@ -313,17 +314,17 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
     }
 
     @Override
-    public void onRequestPermissionsGranted(int requestCode,String[] permissions) {
+    public void onRequestPermissionsGranted(int requestCode, String[] permissions) {
 
     }
 
     @Override
-    public void onRequestPermissionsDenied(int requestCode,String[] permissions) {
+    public void onRequestPermissionsDenied(int requestCode, String[] permissions) {
 
     }
 
     @Override
-    public void onRequestPermissionRationale(int requestCode,String[] permissions) {
+    public void onRequestPermissionRationale(int requestCode, String[] permissions) {
 
     }
 
@@ -389,13 +390,31 @@ public class AppActivity extends AppCompatActivity implements AppTransaction, Ap
     @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
-        getAppActionBar().setTitle(title+"");
+        getAppActionBar().setTitle(title + "");
     }
 
     @Override
     public void setTitleColor(int textColor) {
         super.setTitleColor(textColor);
         getAppActionBar().getTitleView().setTextColor(textColor);
+    }
+
+    /**
+     * 设置背景
+     *
+     * @param backIcon        返回按钮
+     * @param title           标题
+     * @param position        padding位置
+     * @param padding         padding值
+     * @param backgroundColor 背景颜色
+     */
+    public void setTitle(int backIcon, String title, Position position, int padding, int backgroundColor) {
+        AppActionBar actionBar = getAppActionBar();
+        actionBar.setBackIconResource(backIcon);
+        actionBar.setTitle(title);
+        actionBar.setBackIconPadding(position, padding);
+        actionBar.setTitleTextColor(Color.WHITE);
+        actionBar.setBackgroundColor(backgroundColor);
     }
 
     /**

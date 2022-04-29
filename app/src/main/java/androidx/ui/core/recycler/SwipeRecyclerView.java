@@ -267,12 +267,14 @@ public class SwipeRecyclerView extends RecyclerView {
     public boolean onInterceptTouchEvent(MotionEvent e) {
         touchSwipeEvent(e);
         return super.onInterceptTouchEvent(e);
+//        return touchInterceptEvent(e);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         touchSwipeEvent(e);
         return super.onTouchEvent(e);
+//        return touchSwipeEvent(e);
     }
 
     /**
@@ -303,15 +305,48 @@ public class SwipeRecyclerView extends RecyclerView {
 
     }
 
+    private long downTime = 0;
+    private boolean isNeedDistance;
+
+    /**
+     * @param e
+     * @return
+     */
+    protected boolean touchInterceptEvent(MotionEvent e) {
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                downX = e.getX();
+                downY = e.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float distanceX = e.getX() - downX;
+                float distanceY = e.getY() - downY;
+                if (Math.abs(distanceX) > Math.abs(distanceY)&&Math.abs(distanceX)>10) {
+                    isNeedDistance = true;
+                }else{
+                    isNeedDistance = false;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if (System.currentTimeMillis() - downTime < 50 && !isNeedDistance) {
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+
     /**
      * 触摸事件处理
      *
      * @param e
      */
-    protected void touchSwipeEvent(MotionEvent e) {
+    protected boolean touchSwipeEvent(MotionEvent e) {
         velocityTracker.addMovement(e);
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                downTime = System.currentTimeMillis();
                 if (isSwipeClose()) {
                     childView = findChildViewUnder(e.getX(), e.getY());
                     if (childView != null) {
@@ -340,10 +375,12 @@ public class SwipeRecyclerView extends RecyclerView {
             case MotionEvent.ACTION_MOVE:
                 float distanceX = e.getX() - downX;
                 float distanceY = e.getY() - downY;
+                isNeedDistance = false;
                 if (isSwipeEnable() && e.getPointerCount() < 2) {
                     velocityTracker.computeCurrentVelocity((int) (menuWidth * 0.1F), menuWidth);
                     //水平滑动
                     if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > scaledTouchSlop) {
+                        isNeedDistance = Math.abs(distanceY) > 10;
                         if (getParent() != null) {
                             getParent().requestDisallowInterceptTouchEvent(true);
                         }
@@ -362,8 +399,12 @@ public class SwipeRecyclerView extends RecyclerView {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                if (System.currentTimeMillis() - downTime < 50 && !isNeedDistance) {
+                    return false;
+                }
                 break;
         }
+        return true;
     }
 
     /**

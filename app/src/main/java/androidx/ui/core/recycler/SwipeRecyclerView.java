@@ -26,8 +26,6 @@ public class SwipeRecyclerView extends RecyclerView {
     private OverScroller scroller;
     //速度追踪器
     private VelocityTracker velocityTracker;
-    //按钮坐标
-    private float downX, downY;
     //RecyclerView childView
     private View childView;
     //RecyclerView itemView容器
@@ -53,13 +51,6 @@ public class SwipeRecyclerView extends RecyclerView {
     private ItemTouchHelper touchHelper;
     //侧滑助手
     private SwipeItemTouchHelperCallback callback;
-
-    private int itemCount;
-    private int listItem;
-    private int headerItem;
-    private int footerItem;
-    private int loadingItem;
-    private int menuItem;
 
     public SwipeRecyclerView(@NonNull Context context) {
         super(context);
@@ -265,16 +256,12 @@ public class SwipeRecyclerView extends RecyclerView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
-        touchSwipeEvent(e);
-        return super.onInterceptTouchEvent(e);
-//        return touchInterceptEvent(e);
+        return touchSwipeEvent(e);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        touchSwipeEvent(e);
-        return super.onTouchEvent(e);
-//        return touchSwipeEvent(e);
+        return touchSwipeEvent(e);
     }
 
     /**
@@ -305,37 +292,68 @@ public class SwipeRecyclerView extends RecyclerView {
 
     }
 
-    private long downTime = 0;
-    private boolean isNeedDistance;
+    /**
+     * 查找菜单item Layout
+     *
+     * @param e
+     */
+    private void findSwipeItemMenu(MotionEvent e) {
+        if (isSwipeClose()) {
+            childView = findChildViewUnder(e.getX(), e.getY());
+            if (childView != null) {
+                if (getAdapter() instanceof SwipeRecyclerAdapter) {
+                    SwipeRecyclerAdapter adapter = (SwipeRecyclerAdapter) getAdapter();
+                    if (adapter.isHasSwipe()) {
+                        setSwipeOpen(adapter.isSwipeEnable());
+                        itemLayout = adapter.findSwipeItemLayout(childView);
+                        menuLayout = adapter.findSwipeMenuLayout(childView);
+                        menuView = adapter.findSwipeMenuView(childView);
+                        menuWidth = menuView == null ? 0 : menuView.getMeasuredWidth();
+                        if (onTouchItemListener != null) {
+                            onTouchItemListener.onTouchItem(e, this, adapter, childView);
+                        }
+                    }
+                }
+            }
+        }
+        if (!scroller.isFinished()) {
+            scroller.abortAnimation();
+        }
+        scroller = new OverScroller(getContext());
+    }
 
     /**
-     * @param e
-     * @return
+     * 水平移动item
+     *
+     * @param e  操作事件
+     * @param dx 水平间距
+     * @param dy 垂直间距
      */
-    protected boolean touchInterceptEvent(MotionEvent e) {
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                downX = e.getX();
-                downY = e.getY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                float distanceX = e.getX() - downX;
-                float distanceY = e.getY() - downY;
-                if (Math.abs(distanceX) > Math.abs(distanceY)&&Math.abs(distanceX)>10) {
-                    isNeedDistance = true;
-                }else{
-                    isNeedDistance = false;
+    private void moveSwipeItemMenu(MotionEvent e, float dx, float dy) {
+        if (isSwipeEnable() && e.getPointerCount() < 2) {
+            velocityTracker.computeCurrentVelocity((int) (menuWidth * 0.1F), menuWidth);
+            //水平滑动
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > scaledTouchSlop) {
+                if (getParent() != null) {
+                    getParent().requestDisallowInterceptTouchEvent(true);
                 }
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                if (System.currentTimeMillis() - downTime < 50 && !isNeedDistance) {
-                    return false;
+                if (velocityTracker.getXVelocity() < 10) {
+                    smoothSwipeLayoutBy(dx * 0.5f);
+                } else {
+                    scroller.startScroll(scroller.getFinalX(), 0, (int) dx, 0, 250);
+                    invalidate();
                 }
-                break;
+            }
+            //垂直滑动
+            if (Math.abs(dx) < Math.abs(dy) && Math.abs(dy) > scaledTouchSlop) {
+                closeSwipe();
+            }
         }
-        return true;
     }
+
+    private float dx, dy;
+    private long dt = 0;
+    private boolean isMove;
 
     /**
      * 触摸事件处理
@@ -346,65 +364,32 @@ public class SwipeRecyclerView extends RecyclerView {
         velocityTracker.addMovement(e);
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                downTime = System.currentTimeMillis();
-                if (isSwipeClose()) {
-                    childView = findChildViewUnder(e.getX(), e.getY());
-                    if (childView != null) {
-                        if (getAdapter() instanceof SwipeRecyclerAdapter) {
-                            SwipeRecyclerAdapter adapter = (SwipeRecyclerAdapter) getAdapter();
-                            if (adapter.isHasSwipe()) {
-                                setSwipeOpen(adapter.isSwipeEnable());
-                                itemLayout = adapter.findSwipeItemLayout(childView);
-                                menuLayout = adapter.findSwipeMenuLayout(childView);
-                                menuView = adapter.findSwipeMenuView(childView);
-                                menuWidth = menuView == null ? 0 : menuView.getMeasuredWidth();
-                                if (onTouchItemListener != null) {
-                                    onTouchItemListener.onTouchItem(e, this, adapter, childView);
-                                }
-                            }
-                        }
-                    }
-                }
-                downX = e.getX();
-                downY = e.getY();
-                if (!scroller.isFinished()) {
-                    scroller.abortAnimation();
-                }
-                scroller = new OverScroller(getContext());
+                findSwipeItemMenu(e);
+                dx = e.getX();
+                dy = e.getY();
+                isMove = false;
+                dt = System.currentTimeMillis();
                 break;
             case MotionEvent.ACTION_MOVE:
-                float distanceX = e.getX() - downX;
-                float distanceY = e.getY() - downY;
-                isNeedDistance = false;
-                if (isSwipeEnable() && e.getPointerCount() < 2) {
-                    velocityTracker.computeCurrentVelocity((int) (menuWidth * 0.1F), menuWidth);
-                    //水平滑动
-                    if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > scaledTouchSlop) {
-                        isNeedDistance = Math.abs(distanceY) > 10;
-                        if (getParent() != null) {
-                            getParent().requestDisallowInterceptTouchEvent(true);
-                        }
-                        if (velocityTracker.getXVelocity() < 10) {
-                            smoothSwipeLayoutBy(distanceX * 0.5f);
-                        } else {
-                            scroller.startScroll(scroller.getFinalX(), 0, (int) distanceX, 0, 250);
-                            invalidate();
-                        }
-                    }
-                    //垂直滑动
-                    if (Math.abs(distanceX) < Math.abs(distanceY) && Math.abs(distanceY) > scaledTouchSlop) {
-                        closeSwipe();
-                    }
+                float distanceX = e.getX() - dx;
+                float distanceY = e.getY() - dy;
+                float adx = Math.abs(distanceX);
+                float ady = Math.abs(distanceY);
+                if (adx > ady && ady > 10) {
+                    isMove = true;
+                }
+                if (isMove) {
+                    moveSwipeItemMenu(e, distanceX, distanceY);
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                if (System.currentTimeMillis() - downTime < 50 && !isNeedDistance) {
-                    return false;
+                if (System.currentTimeMillis() - dt < 50 && isMove) {
+                    isMove = false;
                 }
                 break;
         }
-        return true;
+        return isMove;
     }
 
     /**

@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,15 +25,16 @@ import java.util.List;
  */
 public class SwipeRefreshLoading extends FrameLayout {
 
-    private SwipeRefreshLayout swipeRefresh;
-    private NestedScrollView scroll_view;
-    private SwipeRecyclerView swipeRecycler;
-    private RecyclerView recycler;
-    private SwipeLoadingLayout loadingLayout;
-    private Placeholder placeholder;
-
     private int itemCount;
     private int listItem;
+    private SwipeRefreshLayout swipeRefresh;
+    private FrameLayout swipeFrame;
+    private NestedScrollView scrollView;
+    private LinearLayout swipeLinear;
+    private SwipeRecyclerView swipeRecycler;
+    private RecyclerView recycler;
+    private SwipeLoadingLayout swipeLoading;
+    private Placeholder placeholder;
 
     public SwipeRefreshLoading(@NonNull Context context) {
         super(context);
@@ -72,19 +74,35 @@ public class SwipeRefreshLoading extends FrameLayout {
             adapter.setItems(list);
             array.recycle();
         }
-        loadingLayout.attachNestedScrollView(scroll_view);
+        swipeLoading.attachNestedScrollView(scrollView);
     }
 
     /**
      * 初始化
      */
     private void initView() {
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-        scroll_view = (NestedScrollView) findViewById(R.id.scroll_view);
-        swipeRecycler = (SwipeRecyclerView) findViewById(R.id.swipe_recycler);
-        recycler = (RecyclerView) findViewById(R.id.recycler);
-        loadingLayout = (SwipeLoadingLayout) findViewById(R.id.loading_layout);
-        placeholder = (Placeholder) findViewById(R.id.placeholder);
+        swipeRefresh = findViewById(R.id.swipe_refresh);
+        swipeFrame = findViewById(R.id.swipe_frame);
+        scrollView = findViewById(R.id.scroll_view);
+        swipeLinear = findViewById(R.id.swipe_linear);
+        swipeRecycler = findViewById(R.id.swipe_recycler);
+        recycler = findViewById(R.id.recycler);
+        swipeLoading = findViewById(R.id.swipe_loading);
+        placeholder = findViewById(R.id.placeholder);
+    }
+
+    /**
+     * @return 刷新下Frame
+     */
+    public FrameLayout getSwipeFrame() {
+        return swipeFrame;
+    }
+
+    /**
+     * @return Recycler父级
+     */
+    public LinearLayout getSwipeLinear() {
+        return swipeLinear;
     }
 
     /**
@@ -98,7 +116,7 @@ public class SwipeRefreshLoading extends FrameLayout {
      * @return 滑动View
      */
     public NestedScrollView getNestedScrollView() {
-        return scroll_view;
+        return scrollView;
     }
 
     /**
@@ -118,8 +136,8 @@ public class SwipeRefreshLoading extends FrameLayout {
     /**
      * @return 滑动加载更多
      */
-    public SwipeLoadingLayout getSwipeLoadingLayout() {
-        return loadingLayout;
+    public SwipeLoadingLayout getSwipeLoading() {
+        return swipeLoading;
     }
 
     /**
@@ -139,6 +157,15 @@ public class SwipeRefreshLoading extends FrameLayout {
     }
 
     /**
+     * 设置刷新颜色
+     *
+     * @param colors 刷新颜色
+     */
+    public void setColorSchemeColors(int... colors) {
+        swipeRefresh.setColorSchemeColors(colors);
+    }
+
+    /**
      * 设置刷新监听
      *
      * @param listener 刷新监听
@@ -153,7 +180,15 @@ public class SwipeRefreshLoading extends FrameLayout {
      * @param loading 是否加载更多
      */
     public void setLoading(boolean loading) {
-        loadingLayout.setLoading(loading);
+        swipeLoading.setLoading(loading);
+    }
+
+    /**
+     * 刷新+加载完毕
+     */
+    public void finish() {
+        setRefreshing(false);
+        setLoading(false);
     }
 
     /**
@@ -162,7 +197,7 @@ public class SwipeRefreshLoading extends FrameLayout {
      * @param listener 加载更多监听
      */
     public void setOnLoadingListener(SwipeLoadingLayout.OnLoadingListener listener) {
-        loadingLayout.setOnLoadingListener(listener);
+        swipeLoading.setOnLoadingListener(listener);
     }
 
     /**
@@ -171,16 +206,25 @@ public class SwipeRefreshLoading extends FrameLayout {
      * @param manager 布局管理器
      */
     public void setLayoutManager(LinearLayoutManager manager) {
-        recycler.setLayoutManager(manager);
+        setLayoutManager(manager, false);
     }
 
     /**
-     * 设置侧滑布局管理器
+     * 设置布局管理器
      *
      * @param manager 布局管理器
+     * @param swipe   是否侧滑
      */
-    public void setSwipeLayoutManager(LinearLayoutManager manager) {
-        swipeRecycler.setLayoutManager(manager);
+    public void setLayoutManager(LinearLayoutManager manager, boolean swipe) {
+        if (swipe) {
+            swipeRecycler.setVisibility(VISIBLE);
+            recycler.setVisibility(GONE);
+            swipeRecycler.setLayoutManager(manager);
+        } else {
+            swipeRecycler.setVisibility(GONE);
+            recycler.setVisibility(VISIBLE);
+            recycler.setLayoutManager(manager);
+        }
     }
 
     /**
@@ -188,19 +232,27 @@ public class SwipeRefreshLoading extends FrameLayout {
      *
      * @param adapter 适配器
      */
-    public void setAdapter(RecyclerAdapter adapter) {
+    public <T extends RecyclerAdapter> void setAdapter(T adapter) {
         adapter.setPlaceholder(placeholder);
         recycler.setAdapter(adapter);
     }
 
     /**
-     * 设置侧滑适配器
+     * 设置适配器
      *
-     * @param adapter 侧滑适配器
+     * @param adapter 适配器
      */
-    public void setSwipeAdapter(SwipeRecyclerAdapter adapter) {
+    public <T extends SwipeRecyclerAdapter> void setAdapter(T adapter) {
         adapter.setPlaceholder(placeholder);
         swipeRecycler.setAdapter(adapter);
+    }
+
+
+    /**
+     * 关闭侧滑
+     */
+    public void closeSwipe(){
+        swipeRecycler.closeSwipe();
     }
 
     /**

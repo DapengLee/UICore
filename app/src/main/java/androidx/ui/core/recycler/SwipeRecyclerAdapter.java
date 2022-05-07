@@ -776,7 +776,9 @@ public abstract class SwipeRecyclerAdapter<T> extends RecyclerView.Adapter imple
      * @param holder   控件容器
      * @param position 位置
      */
-    protected abstract void onItemBindViewHolder(ViewHolder holder, int position);
+    protected void onItemBindViewHolder(ViewHolder holder, int position) {
+
+    }
 
     /**
      * 头部绑定数据

@@ -4,7 +4,7 @@ Android UI框架Activity、Fragment封装，支持状态栏修改、快速设置
 流式布局列表、桌面圆点、字体大小设置、语言设置、短信发送倒计时、消息提示、数据库、
 常用正则、网页加载器、数字处理、价格处理
 ## ARR
-[UICore.arr](https://github.com/RelinRan/UICore/blob/master/uicore_2022.5.1.1.aar)
+[UICore.arr](https://github.com/RelinRan/UICore/blob/master/uicore_2022.5.7.1.aar)
 ## Maven
 1.build.grade
 ```
@@ -18,7 +18,7 @@ allprojects {
 2./app/build.grade
 ```
 dependencies {
-	implementation 'com.github.RelinRan:UICore:2022.5.1.1'
+	implementation 'com.github.RelinRan:UICore:2022.5.7.1'
 }
 ```
 ## AppActivity

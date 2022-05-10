@@ -21,6 +21,7 @@
     <dimen name="toast_padding_vertical">5dp</dimen>
     <dimen name="toast_padding_horizontal">10dp</dimen>
     <dimen name="toast_text_size">14sp</dimen>
+    <dimen name="toast_y_offset">120dp</dimen>
     <!--Wheel-->
     <dimen name="wheel_item_width">160dp</dimen>
     <dimen name="wheel_item_height">40dp</dimen>

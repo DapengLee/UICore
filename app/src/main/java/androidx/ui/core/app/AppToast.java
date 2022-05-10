@@ -53,7 +53,8 @@ public class AppToast {
      * @param msg     内容
      */
     public static void show(Context context, String msg) {
-        makeText(context, Gravity.BOTTOM, 0, 120, Toast.LENGTH_SHORT, msg).show();
+        int yOffset = context.getResources().getDimensionPixelOffset(R.dimen.toast_y_offset);
+        makeText(context, Gravity.BOTTOM, 0, yOffset, Toast.LENGTH_SHORT, msg).show();
     }
 
     /**

@@ -57,9 +57,11 @@ public class CardImage extends CardView {
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CardImage);
             int index = array.getInt(R.styleable.CardImage_android_scaleType, -1);
+            boolean adjustViewBounds = array.getBoolean(R.styleable.CardImage_android_adjustViewBounds, false);
             if (index >= 0) {
                 imageView.setScaleType(sScaleTypeArray[index]);
             }
+            imageView.setAdjustViewBounds(adjustViewBounds);
             Drawable d = array.getDrawable(R.styleable.CardImage_android_src);
             if (d != null) {
                 imageView.setImageDrawable(d);

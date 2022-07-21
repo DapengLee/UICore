@@ -1,10 +1,15 @@
 # UICore
-Android UI框架Activity、Fragment封装，支持状态栏修改、快速设置标题栏、设置空视图、
-内含轮播、刷新、加载、侧滑删除、ShapeButton、日期选择器、滚轮选择器、权限工具、分享数据、
-流式布局列表、桌面圆点、字体大小设置、语言设置、短信发送倒计时、消息提示、数据库、
-常用正则、网页加载器、数字处理、价格处理
-## ARR
-[uicore_2022.5.7.1.aar](https://github.com/RelinRan/UICore/blob/master/uicore_2022.5.7.1.aar)
+Android UI框架  
+Activity、Fragment封装，支持状态栏修改、快速设置标题栏、设置空视图、  
+内含轮播、刷新、加载、侧滑删除、ShapeButton、日期选择器、滚轮选择器、权限工具、分享数据、  
+流式布局列表、桌面圆点、字体大小设置、语言设置、短信发送倒计时、消息提示、数据库、  
+常用正则、网页加载器、数字处理、价格处理  
+# 资源
+|名字|资源|
+|-|-|
+|AAR|[uicore_2022.7.21.1.aar](https://github.com/RelinRan/UICore/blob/master/uicore_2022.7.21.1.aar)|
+|GitHub |[UICore](https://github.com/RelinRan/UICore)|
+|Gitee|[UICore](https://gitee.com/relin/UICore)|
 ## Maven
 1.build.grade
 ```
@@ -18,7 +23,7 @@ allprojects {
 2./app/build.grade
 ```
 dependencies {
-	implementation 'com.github.RelinRan:UICore:2022.5.7.1'
+	implementation 'com.github.RelinRan:UICore:2022.7.21.1'
 }
 ```
 ## AppActivity

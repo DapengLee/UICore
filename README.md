@@ -7,7 +7,7 @@ Activity、Fragment封装，支持状态栏修改、快速设置标题栏、设�
 # 资源
 |名字|资源|
 |-|-|
-|AAR|[uicore_2022.7.21.1.aar](https://github.com/RelinRan/UICore/blob/master/uicore_2022.7.21.1.aar)|
+|AAR|[uicore.aar](https://github.com/RelinRan/UICore/blob/master/uicore_2022.7.25.1.aar)|
 |GitHub |[UICore](https://github.com/RelinRan/UICore)|
 |Gitee|[UICore](https://gitee.com/relin/UICore)|
 ## Maven
@@ -23,7 +23,7 @@ allprojects {
 2./app/build.grade
 ```
 dependencies {
-	implementation 'com.github.RelinRan:UICore:2022.7.21.1'
+	implementation 'com.github.RelinRan:UICore:2022.7.25.1'
 }
 ```
 ## AppActivity

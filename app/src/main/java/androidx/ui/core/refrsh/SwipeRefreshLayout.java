@@ -230,16 +230,16 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
-                    @Override
-                    public SavedState createFromParcel(Parcel in) {
-                        return new SavedState(in);
-                    }
+            @Override
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
 
-                    @Override
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 
     @Override
@@ -713,39 +713,31 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         ensureTarget();
-
         final int action = ev.getActionMasked();
         int pointerIndex;
-
         if (mReturningToStart && action == MotionEvent.ACTION_DOWN) {
             mReturningToStart = false;
         }
-
-        if (!isEnabled() || mReturningToStart || canChildScrollUp()
-                || mRefreshing || mNestedScrollInProgress) {
+        if (!isEnabled() || mReturningToStart || canChildScrollUp() || mRefreshing || mNestedScrollInProgress) {
             // Fail fast if we're not in a state where a swipe is possible
             return false;
         }
-
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 setTargetOffsetTopAndBottom(mOriginalOffsetTop - mCircleView.getTop());
                 mActivePointerId = ev.getPointerId(0);
                 mIsBeingDragged = false;
-
                 pointerIndex = ev.findPointerIndex(mActivePointerId);
                 if (pointerIndex < 0) {
                     return false;
                 }
                 mInitialDownY = ev.getY(pointerIndex);
                 break;
-
             case MotionEvent.ACTION_MOVE:
                 if (mActivePointerId == INVALID_POINTER) {
                     Log.e(LOG_TAG, "Got ACTION_MOVE event but don't have an active pointer id.");
                     return false;
                 }
-
                 pointerIndex = ev.findPointerIndex(mActivePointerId);
                 if (pointerIndex < 0) {
                     return false;
@@ -753,19 +745,16 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
                 final float y = ev.getY(pointerIndex);
                 startDragging(y);
                 break;
-
             case MotionEvent.ACTION_POINTER_UP:
                 onSecondaryPointerUp(ev);
                 break;
-
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 mIsBeingDragged = false;
                 mActivePointerId = INVALID_POINTER;
                 break;
         }
-
-//        return mIsBeingDragged;
+//      return mIsBeingDragged;
         return super.onInterceptTouchEvent(ev);
     }
 
@@ -1100,7 +1089,6 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     private void moveSpinner(float overscrollTop) {
         mProgress.setArrowEnabled(true);
         float originalDragPercent = overscrollTop / mTotalDragDistance;
-
         float dragPercent = Math.min(1f, Math.abs(originalDragPercent));
         float adjustedPercent = (float) Math.max(dragPercent - .4, 0) * 5 / 3;
         float extraOS = Math.abs(overscrollTop) - mTotalDragDistance;
@@ -1129,8 +1117,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             setAnimationProgress(Math.min(1f, overscrollTop / mTotalDragDistance));
         }
         if (overscrollTop < mTotalDragDistance) {
-            if (mProgress.getAlpha() > STARTING_PROGRESS_ALPHA
-                    && !isAnimationRunning(mAlphaStartAnimation)) {
+            if (mProgress.getAlpha() > STARTING_PROGRESS_ALPHA && !isAnimationRunning(mAlphaStartAnimation)) {
                 // Animate the alpha
                 startProgressAlphaStartAnimation();
             }
@@ -1147,6 +1134,10 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         float rotation = (-0.25f + .4f * adjustedPercent + tensionPercent * 2) * .5f;
         mProgress.setProgressRotation(rotation);
         setTargetOffsetTopAndBottom(targetY - mCurrentTargetOffsetTop);
+
+        if (onMoveSpinnerListener != null) {
+            onMoveSpinnerListener.onMoveSpinner(overscrollTop, mTotalDragDistance);
+        }
     }
 
     private void finishSpinner(float overscrollTop) {
@@ -1383,4 +1374,17 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
          */
         boolean canChildScrollUp(@NonNull SwipeRefreshLayout parent, @Nullable View child);
     }
+
+    private OnMoveSpinnerListener onMoveSpinnerListener;
+
+    public void setOnMoveSpinnerListener(OnMoveSpinnerListener onMoveSpinnerListener) {
+        this.onMoveSpinnerListener = onMoveSpinnerListener;
+    }
+
+    public interface OnMoveSpinnerListener {
+
+        void onMoveSpinner(float overscrollTop, float totalDragDistance);
+
+    }
+
 }
